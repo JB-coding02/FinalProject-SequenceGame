@@ -1,6 +1,6 @@
 ﻿namespace Final_Project___Sequence_Game
 {
-    partial class Form1
+    partial class MainMenu
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,13 +30,13 @@
         {
             SuspendLayout();
             // 
-            // Form1
+            // MainMenu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(961, 904);
-            Name = "Form1";
-            Text = "Form1";
+            ClientSize = new Size(771, 900);
+            Name = "MainMenu";
+            Text = "Main Menu";
             ResumeLayout(false);
         }
 
