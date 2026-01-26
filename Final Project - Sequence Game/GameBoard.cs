@@ -1,8 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
 namespace Final_Project___Sequence_Game;
 
-public partial class MainMenu : Form
+public partial class GameBoard : Form
 {
-    public MainMenu()
+    public GameBoard()
     {
         InitializeComponent();
     }
@@ -30,12 +38,11 @@ public partial class MainMenu : Form
     }
 
     public void setSridValues()
-        {
+    {
         string[,] grid = GetGrid();
         for (int i = 0; i < grid[].Length; i++)
         {
             grid[0, 0] = "FREE";
         } // Example of setting a specific grid slot to a card value
     }
-
 }
