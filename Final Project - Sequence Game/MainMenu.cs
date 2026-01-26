@@ -1,10 +1,9 @@
-namespace Final_Project___Sequence_Game
+namespace Final_Project___Sequence_Game;
+
+public partial class MainMenu : Form
 {
-    public partial class MainMenu : Form
+    public MainMenu()
     {
-        public MainMenu()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
