@@ -21,7 +21,6 @@ namespace Final_Project___Sequence_Game
             return grid;
         }
 
-        // Need to set each grid slot to specific card values
         public string[,] GetGrid()
         {
             string[,] gameGrid = CreateGrid();

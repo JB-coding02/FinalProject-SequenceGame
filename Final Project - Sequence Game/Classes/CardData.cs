@@ -19,12 +19,5 @@ public class CardData
     /// </summary>
     [Key]
     [Required]
-    public required string CardIdentity 
-    { 
-        get { return CardIdentity; }
-        set
-        {
-            CardIdentity = value;
-        }
-    }
+    public required string CardIdentity { get; set; }
 }

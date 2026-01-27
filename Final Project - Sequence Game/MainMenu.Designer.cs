@@ -28,18 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
+            BtnPlay = new Button();
             SuspendLayout();
+            // 
+            // BtnPlay
+            // 
+            BtnPlay.Location = new Point(514, 510);
+            BtnPlay.Name = "BtnPlay";
+            BtnPlay.Size = new Size(235, 70);
+            BtnPlay.TabIndex = 0;
+            BtnPlay.Text = "Play";
+            BtnPlay.UseVisualStyleBackColor = true;
             // 
             // MainMenu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(761, 592);
+            Controls.Add(BtnPlay);
             Name = "MainMenu";
             Text = "Main Menu";
             ResumeLayout(false);
         }
 
         #endregion
+
+        private Button BtnPlay;
     }
 }
