@@ -28,17 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             BtnPlay = new Button();
             SuspendLayout();
             // 
             // BtnPlay
             // 
+            BtnPlay.Enabled = false;
             BtnPlay.Location = new Point(514, 510);
             BtnPlay.Name = "BtnPlay";
             BtnPlay.Size = new Size(235, 70);
             BtnPlay.TabIndex = 0;
             BtnPlay.Text = "Play";
             BtnPlay.UseVisualStyleBackColor = true;
+            BtnPlay.Click += BtnPlay_Click;
             // 
             // MainMenu
             // 
@@ -46,6 +49,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(761, 592);
             Controls.Add(BtnPlay);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainMenu";
             Text = "Main Menu";
             ResumeLayout(false);
