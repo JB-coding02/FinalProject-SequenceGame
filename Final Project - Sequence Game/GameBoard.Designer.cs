@@ -36,20 +36,22 @@
             // ImgGameBoard
             // 
             ImgGameBoard.Image = (Image)resources.GetObject("ImgGameBoard.Image");
-            ImgGameBoard.Location = new Point(12, 12);
+            ImgGameBoard.Location = new Point(8, 7);
+            ImgGameBoard.Margin = new Padding(2, 2, 2, 2);
             ImgGameBoard.Name = "ImgGameBoard";
-            ImgGameBoard.Size = new Size(1010, 815);
+            ImgGameBoard.Size = new Size(800, 644);
             ImgGameBoard.SizeMode = PictureBoxSizeMode.AutoSize;
             ImgGameBoard.TabIndex = 0;
             ImgGameBoard.TabStop = false;
             // 
             // GameBoard
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1286, 942);
+            ClientSize = new Size(961, 808);
             Controls.Add(ImgGameBoard);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(2, 2, 2, 2);
             Name = "GameBoard";
             Text = "Game Board";
             ((System.ComponentModel.ISupportInitialize)ImgGameBoard).EndInit();

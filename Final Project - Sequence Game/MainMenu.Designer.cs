@@ -35,9 +35,10 @@
             // BtnPlay
             // 
             BtnPlay.Enabled = false;
-            BtnPlay.Location = new Point(514, 510);
+            BtnPlay.Location = new Point(360, 306);
+            BtnPlay.Margin = new Padding(2);
             BtnPlay.Name = "BtnPlay";
-            BtnPlay.Size = new Size(235, 70);
+            BtnPlay.Size = new Size(164, 42);
             BtnPlay.TabIndex = 0;
             BtnPlay.Text = "Play";
             BtnPlay.UseVisualStyleBackColor = true;
@@ -45,11 +46,12 @@
             // 
             // MainMenu
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(761, 592);
+            ClientSize = new Size(533, 355);
             Controls.Add(BtnPlay);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(2);
             Name = "MainMenu";
             Text = "Main Menu";
             ResumeLayout(false);
