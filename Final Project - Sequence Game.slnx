@@ -1,3 +1,9 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <Project Path="Final Project - Sequence Game/Database1/SequenceGame.sqlproj" Id="551875aa-8071-4b60-82f1-70ce42cb6bb7">
+      <Build />
+      <Deploy />
+    </Project>
+  </Folder>
   <Project Path="Final Project - Sequence Game/Final Project - Sequence Game.csproj" />
 </Solution>
