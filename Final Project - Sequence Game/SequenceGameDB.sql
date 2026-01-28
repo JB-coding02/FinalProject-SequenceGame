@@ -11,7 +11,7 @@ USE SequenceGameDB;
 GO
 
 CREATE TABLE [dbo].[CardData] (
-[CardIdentity] VARCHAR (3) NOT NULL,
+[CardIdentity] VARCHAR (4) NOT NULL,
 PRIMARY KEY CLUSTERED ([CardIdentity] ASC)
 );
 
@@ -29,7 +29,7 @@ PRIMARY KEY CLUSTERED ([GameID] ASC)
 
 CREATE TABLE [dbo].[GameDeckCards] (
 [GameID] INT NOT NULL,
-[CardIdentity] VARCHAR (3) NOT NULL,
+[CardIdentity] VARCHAR (4) NOT NULL,
 PRIMARY KEY CLUSTERED ([GameID] ASC, [CardIdentity] ASC),
 FOREIGN KEY ([GameID]) REFERENCES [dbo].[GameData] ([GameID]),
 FOREIGN KEY ([CardIdentity]) REFERENCES [dbo].[CardData] ([CardIdentity])
@@ -37,7 +37,7 @@ FOREIGN KEY ([CardIdentity]) REFERENCES [dbo].[CardData] ([CardIdentity])
 
 CREATE TABLE [dbo].[GameDiscardedCards] (
 [GameID] INT NOT NULL,
-[CardIdentity] VARCHAR (3) NOT NULL,
+[CardIdentity] VARCHAR (4) NOT NULL,
 PRIMARY KEY CLUSTERED ([GameID] ASC, [CardIdentity] ASC),
 FOREIGN KEY ([GameID]) REFERENCES [dbo].[GameData] ([GameID]),
 FOREIGN KEY ([CardIdentity]) REFERENCES [dbo].[CardData] ([CardIdentity])

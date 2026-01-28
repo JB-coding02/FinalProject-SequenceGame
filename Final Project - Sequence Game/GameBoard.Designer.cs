@@ -30,31 +30,45 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameBoard));
             ImgGameBoard = new PictureBox();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)ImgGameBoard).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // ImgGameBoard
             // 
             ImgGameBoard.Image = (Image)resources.GetObject("ImgGameBoard.Image");
             ImgGameBoard.Location = new Point(8, 7);
-            ImgGameBoard.Margin = new Padding(2, 2, 2, 2);
+            ImgGameBoard.Margin = new Padding(2);
             ImgGameBoard.Name = "ImgGameBoard";
-            ImgGameBoard.Size = new Size(800, 644);
+            ImgGameBoard.Size = new Size(405, 565);
             ImgGameBoard.SizeMode = PictureBoxSizeMode.AutoSize;
             ImgGameBoard.TabIndex = 0;
             ImgGameBoard.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(428, 7);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(521, 64);
+            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox1.TabIndex = 1;
+            pictureBox1.TabStop = false;
             // 
             // GameBoard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(961, 808);
+            Controls.Add(pictureBox1);
             Controls.Add(ImgGameBoard);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "GameBoard";
             Text = "Game Board";
             ((System.ComponentModel.ISupportInitialize)ImgGameBoard).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -62,5 +76,6 @@
         #endregion
 
         private PictureBox ImgGameBoard;
+        private PictureBox pictureBox1;
     }
 }

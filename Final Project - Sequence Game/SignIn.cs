@@ -6,13 +6,12 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Final_Project___Sequence_Game
+namespace Final_Project___Sequence_Game;
+
+public partial class SignIn : Form
 {
-    public partial class SignIn : Form
+    public SignIn()
     {
-        public SignIn()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
