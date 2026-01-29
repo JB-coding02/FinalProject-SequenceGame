@@ -37,7 +37,7 @@ public partial class MainMenu : Form
     {
         return """
             Data Source=(localdb)\\MSSQLLocalDB;
-            Initial Catalog=SequenceGame;
+            Initial Catalog=SequenceGameDB;
             Integrated Security=True;
             Connect Timeout=30;
             Encrypt=True;

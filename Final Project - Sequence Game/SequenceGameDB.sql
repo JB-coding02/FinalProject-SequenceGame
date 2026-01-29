@@ -59,7 +59,9 @@ FOREIGN KEY ([TeamID]) REFERENCES [dbo].[TeamData] ([TeamID])
 
 CREATE TABLE [dbo].[PlayerData] (
 [PlayerID] INT IDENTITY (1, 1) NOT NULL,
+[PlayerEmail] NVARCHAR (100) NOT NULL,
 [Username] NVARCHAR (100) NOT NULL,
+[PasswordHash] NVARCHAR (256) NOT NULL,
 PRIMARY KEY CLUSTERED ([PlayerID] ASC)
 );
 
