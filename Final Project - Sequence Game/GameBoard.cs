@@ -5,12 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Final_Project___Sequence_Game;
 
 public partial class GameBoard : Form
 {
-    public GameBoard()
+    public GameBoard(string? PlayerUsername)
     {
         InitializeComponent();
     }
@@ -55,5 +56,10 @@ public partial class GameBoard : Form
         {  "FREE", "AD", "KD", "QD", "10D", "9D", "8D", "7D", "6D", "FREE" }
         };
         return cardArray;
+    }
+
+    private void ImgGameBoard_Click(object sender, EventArgs e)
+    {
+        imgZoomedInBoard.Visible = true;
     }
 }
