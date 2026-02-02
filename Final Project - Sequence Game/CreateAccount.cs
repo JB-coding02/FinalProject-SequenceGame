@@ -16,7 +16,7 @@ namespace Final_Project___Sequence_Game
             InitializeComponent();
         }
 
-        private void btnCreateAccount_Click(object sender, EventArgs e)
+        private void btnCreate_Click(object sender, EventArgs e)
         {
             if (!txtUsername.Text.IsWhiteSpace())
             {

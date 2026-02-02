@@ -7,29 +7,23 @@ namespace Final_Project___Sequence_Game;
 
 public partial class MainMenu : Form
 {
+
     public MainMenu()
     {
         InitializeComponent();
     }
 
+    public MainMenu(string? Username, string? Email)
+    {
+        InitializeComponent();
+
+        txtPlayerEmail.Text = Email;
+        txtUsername.Text = Username;
+    }
+
     public void getConnection()
     {
         string connString = getConnectionString();
-
-        //using (SqlConnection conn = new SqlConnection(connString))
-        //{
-        //    conn.Open();
-
-        //    string query = "SELECT * FROM Animals"; // example table
-        //    SqlCommand cmd = new SqlCommand(query, conn);
-
-        //    SqlDataReader reader = cmd.ExecuteReader();
-
-        //    while (reader.Read())
-        //    {
-        //        Console.WriteLine(reader["Name"].ToString());
-        //    }
-        //}
     }
 
 
@@ -52,6 +46,18 @@ public partial class MainMenu : Form
     {
         GameBoard gameBoard = new GameBoard();
         gameBoard.Show();
+        this.Close();
+    }
+
+    private void btnSignIn_Click(object sender, EventArgs e)
+    {
+        SignIn signIn = new SignIn();
+        signIn.Show();
         this.Hide();
+    }
+
+    private void btnExitGame_Click(object sender, EventArgs e)
+    {
+        this.Close();
     }
 }

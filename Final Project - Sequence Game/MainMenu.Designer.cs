@@ -79,6 +79,7 @@
             btnSignIn.TabIndex = 3;
             btnSignIn.Text = "Sign-In";
             btnSignIn.UseVisualStyleBackColor = true;
+            btnSignIn.Click += btnSignIn_Click;
             // 
             // btnExitGame
             // 
@@ -89,6 +90,7 @@
             btnExitGame.TabIndex = 4;
             btnExitGame.Text = "Exit";
             btnExitGame.UseVisualStyleBackColor = true;
+            btnExitGame.Click += btnExitGame_Click;
             // 
             // lblPlayerEmail
             // 

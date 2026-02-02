@@ -30,7 +30,7 @@
         {
             txtPassword = new TextBox();
             lblPassword = new Label();
-            btnCreateAccount = new Button();
+            btnCreate = new Button();
             txtEmail = new TextBox();
             lblEmail = new Label();
             txtUsername = new TextBox();
@@ -59,15 +59,15 @@
             lblPassword.TabIndex = 24;
             lblPassword.Text = "Password:";
             // 
-            // btnCreateAccount
+            // btnCreate
             // 
-            btnCreateAccount.Location = new Point(12, 276);
-            btnCreateAccount.Name = "btnCreateAccount";
-            btnCreateAccount.Size = new Size(405, 88);
-            btnCreateAccount.TabIndex = 23;
-            btnCreateAccount.Text = "Create Account";
-            btnCreateAccount.UseVisualStyleBackColor = true;
-            btnCreateAccount.Click += btnCreateAccount_Click;
+            btnCreate.Location = new Point(12, 276);
+            btnCreate.Name = "btnCreate";
+            btnCreate.Size = new Size(405, 88);
+            btnCreate.TabIndex = 23;
+            btnCreate.Text = "Create Account";
+            btnCreate.UseVisualStyleBackColor = true;
+            btnCreate.Click += btnCreate_Click;
             // 
             // txtEmail
             // 
@@ -138,7 +138,7 @@
             Controls.Add(lblReEnterPassword);
             Controls.Add(txtPassword);
             Controls.Add(lblPassword);
-            Controls.Add(btnCreateAccount);
+            Controls.Add(btnCreate);
             Controls.Add(txtEmail);
             Controls.Add(lblEmail);
             Controls.Add(txtUsername);
@@ -153,7 +153,7 @@
 
         private TextBox txtPassword;
         private Label lblPassword;
-        private Button btnCreateAccount;
+        private Button btnCreate;
         private TextBox txtEmail;
         private Label lblEmail;
         private TextBox txtUsername;

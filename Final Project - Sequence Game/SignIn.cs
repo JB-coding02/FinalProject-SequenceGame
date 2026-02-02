@@ -123,7 +123,7 @@ public partial class SignIn : Form
             if (CheckUsername() && CheckPassword() && CheckEmail())
             {
                 MessageBox.Show("Sign In Successful!");
-                MainMenu mainMenu = new MainMenu();
+                MainMenu mainMenu = new MainMenu(txtUsername.Text, txtEmail.Text);
                 mainMenu.Show();
                 this.Hide();
             }
@@ -136,5 +136,12 @@ public partial class SignIn : Form
         {
             MessageBox.Show("Please fill in all fields.");
         }
+    }
+
+    private void btnCreateAccount_Click(object sender, EventArgs e)
+    {
+        CreateAccount createAccount = new CreateAccount();
+        createAccount.Show();
+        this.Hide();
     }
 }
