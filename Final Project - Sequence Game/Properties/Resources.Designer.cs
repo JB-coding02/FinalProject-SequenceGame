@@ -59,5 +59,15 @@ namespace Final_Project___Sequence_Game.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ZoomedInGameBoard {
+            get {
+                object obj = ResourceManager.GetObject("ZoomedInGameBoard", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

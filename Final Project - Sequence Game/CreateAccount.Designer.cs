@@ -30,7 +30,7 @@
         {
             txtPassword = new TextBox();
             lblPassword = new Label();
-            btnCreate = new Button();
+            btnCreateAccount = new Button();
             txtEmail = new TextBox();
             lblEmail = new Label();
             txtUsername = new TextBox();
@@ -42,70 +42,65 @@
             // txtPassword
             // 
             txtPassword.Font = new Font("Segoe UI", 12F);
-            txtPassword.Location = new Point(172, 124);
-            txtPassword.Margin = new Padding(4, 5, 4, 5);
+            txtPassword.Location = new Point(120, 74);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(214, 39);
+            txtPassword.Size = new Size(151, 29);
             txtPassword.TabIndex = 25;
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
             lblPassword.Font = new Font("Segoe UI", 12F);
-            lblPassword.Location = new Point(48, 127);
-            lblPassword.Margin = new Padding(4, 0, 4, 0);
+            lblPassword.Location = new Point(34, 76);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(116, 32);
+            lblPassword.Size = new Size(79, 21);
             lblPassword.TabIndex = 24;
             lblPassword.Text = "Password:";
             // 
-            // btnCreate
+            // btnCreateAccount
             // 
-            btnCreate.Location = new Point(12, 276);
-            btnCreate.Name = "btnCreate";
-            btnCreate.Size = new Size(405, 88);
-            btnCreate.TabIndex = 23;
-            btnCreate.Text = "Create Account";
-            btnCreate.UseVisualStyleBackColor = true;
-            btnCreate.Click += btnCreate_Click;
+            btnCreateAccount.Location = new Point(8, 166);
+            btnCreateAccount.Margin = new Padding(2, 2, 2, 2);
+            btnCreateAccount.Name = "btnCreateAccount";
+            btnCreateAccount.Size = new Size(284, 53);
+            btnCreateAccount.TabIndex = 23;
+            btnCreateAccount.Text = "Create Account";
+            btnCreateAccount.UseVisualStyleBackColor = true;
+            btnCreateAccount.Click += btnCreateAccount_Click;
             // 
             // txtEmail
             // 
             txtEmail.Font = new Font("Segoe UI", 12F);
-            txtEmail.Location = new Point(172, 65);
-            txtEmail.Margin = new Padding(4, 5, 4, 5);
+            txtEmail.Location = new Point(120, 39);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(214, 39);
+            txtEmail.Size = new Size(151, 29);
             txtEmail.TabIndex = 21;
             // 
             // lblEmail
             // 
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 12F);
-            lblEmail.Location = new Point(88, 68);
-            lblEmail.Margin = new Padding(4, 0, 4, 0);
+            lblEmail.Location = new Point(62, 41);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(76, 32);
+            lblEmail.Size = new Size(51, 21);
             lblEmail.TabIndex = 20;
             lblEmail.Text = "Email:";
             // 
             // txtUsername
             // 
             txtUsername.Font = new Font("Segoe UI", 12F);
-            txtUsername.Location = new Point(172, 6);
-            txtUsername.Margin = new Padding(4, 5, 4, 5);
+            txtUsername.Location = new Point(120, 4);
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(214, 39);
+            txtUsername.Size = new Size(151, 29);
             txtUsername.TabIndex = 19;
             // 
             // lblUsername
             // 
             lblUsername.AutoSize = true;
             lblUsername.Font = new Font("Segoe UI", 12F);
-            lblUsername.Location = new Point(38, 9);
-            lblUsername.Margin = new Padding(4, 0, 4, 0);
+            lblUsername.Location = new Point(27, 5);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(126, 32);
+            lblUsername.Size = new Size(84, 21);
             lblUsername.TabIndex = 18;
             lblUsername.Text = "Username:";
             // 
@@ -113,38 +108,37 @@
             // 
             lblReEnterPassword.AutoSize = true;
             lblReEnterPassword.Font = new Font("Segoe UI", 9F);
-            lblReEnterPassword.Location = new Point(4, 194);
-            lblReEnterPassword.Margin = new Padding(4, 0, 4, 0);
+            lblReEnterPassword.Location = new Point(3, 116);
             lblReEnterPassword.Name = "lblReEnterPassword";
-            lblReEnterPassword.Size = new Size(160, 25);
+            lblReEnterPassword.Size = new Size(107, 15);
             lblReEnterPassword.TabIndex = 26;
             lblReEnterPassword.Text = "Confirm Password:";
             // 
             // textBox1
             // 
             textBox1.Font = new Font("Segoe UI", 12F);
-            textBox1.Location = new Point(172, 185);
-            textBox1.Margin = new Padding(4, 5, 4, 5);
+            textBox1.Location = new Point(120, 111);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(214, 39);
+            textBox1.Size = new Size(151, 29);
             textBox1.TabIndex = 27;
             // 
             // CreateAccount
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(429, 376);
+            ClientSize = new Size(300, 226);
             Controls.Add(textBox1);
             Controls.Add(lblReEnterPassword);
             Controls.Add(txtPassword);
             Controls.Add(lblPassword);
-            Controls.Add(btnCreate);
+            Controls.Add(btnCreateAccount);
             Controls.Add(txtEmail);
             Controls.Add(lblEmail);
             Controls.Add(txtUsername);
             Controls.Add(lblUsername);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "CreateAccount";
-            Text = "CreateAccount";
+            Text = "Create Account";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -153,7 +147,7 @@
 
         private TextBox txtPassword;
         private Label lblPassword;
-        private Button btnCreate;
+        private Button btnCreateAccount;
         private TextBox txtEmail;
         private Label lblEmail;
         private TextBox txtUsername;

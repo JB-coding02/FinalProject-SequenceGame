@@ -35,16 +35,17 @@
             btnSignIn = new Button();
             btnExitGame = new Button();
             lblPlayerEmail = new Label();
-            txtPlayerEmail = new TextBox();
+            txtEmail = new TextBox();
             SuspendLayout();
             // 
             // BtnPlay
             // 
             BtnPlay.Enabled = false;
             BtnPlay.Font = new Font("Segoe UI", 14F);
-            BtnPlay.Location = new Point(227, 412);
+            BtnPlay.Location = new Point(159, 247);
+            BtnPlay.Margin = new Padding(2);
             BtnPlay.Name = "BtnPlay";
-            BtnPlay.Size = new Size(209, 118);
+            BtnPlay.Size = new Size(146, 71);
             BtnPlay.TabIndex = 0;
             BtnPlay.Text = "Play";
             BtnPlay.UseVisualStyleBackColor = true;
@@ -54,28 +55,31 @@
             // 
             lblUsername.AutoSize = true;
             lblUsername.Font = new Font("Segoe UI", 20F);
-            lblUsername.Location = new Point(12, 44);
+            lblUsername.Location = new Point(8, 26);
+            lblUsername.Margin = new Padding(2, 0, 2, 0);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(209, 54);
+            lblUsername.Size = new Size(142, 37);
             lblUsername.TabIndex = 1;
             lblUsername.Text = "Username:";
             // 
             // txtUsername
             // 
             txtUsername.Font = new Font("Segoe UI", 20F);
-            txtUsername.Location = new Point(227, 41);
+            txtUsername.Location = new Point(159, 25);
+            txtUsername.Margin = new Padding(2);
             txtUsername.Name = "txtUsername";
             txtUsername.ReadOnly = true;
-            txtUsername.Size = new Size(394, 61);
+            txtUsername.Size = new Size(277, 43);
             txtUsername.TabIndex = 2;
             txtUsername.TextAlign = HorizontalAlignment.Center;
             // 
             // btnSignIn
             // 
             btnSignIn.Font = new Font("Segoe UI", 14F);
-            btnSignIn.Location = new Point(12, 412);
+            btnSignIn.Location = new Point(8, 247);
+            btnSignIn.Margin = new Padding(2);
             btnSignIn.Name = "btnSignIn";
-            btnSignIn.Size = new Size(209, 118);
+            btnSignIn.Size = new Size(146, 71);
             btnSignIn.TabIndex = 3;
             btnSignIn.Text = "Sign-In";
             btnSignIn.UseVisualStyleBackColor = true;
@@ -84,9 +88,10 @@
             // btnExitGame
             // 
             btnExitGame.Font = new Font("Segoe UI", 14F);
-            btnExitGame.Location = new Point(442, 412);
+            btnExitGame.Location = new Point(309, 247);
+            btnExitGame.Margin = new Padding(2);
             btnExitGame.Name = "btnExitGame";
-            btnExitGame.Size = new Size(209, 118);
+            btnExitGame.Size = new Size(146, 71);
             btnExitGame.TabIndex = 4;
             btnExitGame.Text = "Exit";
             btnExitGame.UseVisualStyleBackColor = true;
@@ -96,28 +101,30 @@
             // 
             lblPlayerEmail.AutoSize = true;
             lblPlayerEmail.Font = new Font("Segoe UI", 20F);
-            lblPlayerEmail.Location = new Point(95, 140);
+            lblPlayerEmail.Location = new Point(66, 84);
+            lblPlayerEmail.Margin = new Padding(2, 0, 2, 0);
             lblPlayerEmail.Name = "lblPlayerEmail";
-            lblPlayerEmail.Size = new Size(126, 54);
+            lblPlayerEmail.Size = new Size(88, 37);
             lblPlayerEmail.TabIndex = 5;
             lblPlayerEmail.Text = "Email:";
             // 
-            // txtPlayerEmail
+            // txtEmail
             // 
-            txtPlayerEmail.Font = new Font("Segoe UI", 20F);
-            txtPlayerEmail.Location = new Point(227, 137);
-            txtPlayerEmail.Name = "txtPlayerEmail";
-            txtPlayerEmail.ReadOnly = true;
-            txtPlayerEmail.Size = new Size(394, 61);
-            txtPlayerEmail.TabIndex = 6;
-            txtPlayerEmail.TextAlign = HorizontalAlignment.Center;
+            txtEmail.Font = new Font("Segoe UI", 20F);
+            txtEmail.Location = new Point(159, 82);
+            txtEmail.Margin = new Padding(2);
+            txtEmail.Name = "txtEmail";
+            txtEmail.ReadOnly = true;
+            txtEmail.Size = new Size(277, 43);
+            txtEmail.TabIndex = 6;
+            txtEmail.TextAlign = HorizontalAlignment.Center;
             // 
             // MainMenu
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(660, 540);
-            Controls.Add(txtPlayerEmail);
+            ClientSize = new Size(462, 324);
+            Controls.Add(txtEmail);
             Controls.Add(lblPlayerEmail);
             Controls.Add(btnExitGame);
             Controls.Add(btnSignIn);
@@ -125,6 +132,7 @@
             Controls.Add(lblUsername);
             Controls.Add(BtnPlay);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(2);
             Name = "MainMenu";
             Text = "Main Menu";
             ResumeLayout(false);
@@ -139,6 +147,6 @@
         private Button btnSignIn;
         private Button btnExitGame;
         private Label lblPlayerEmail;
-        private TextBox txtPlayerEmail;
+        private TextBox txtEmail;
     }
 }
