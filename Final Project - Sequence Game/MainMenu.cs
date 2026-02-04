@@ -1,4 +1,5 @@
 using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client;
 
 
 
@@ -42,11 +43,17 @@ public partial class MainMenu : Form
             """;
     }
 
+    public SqlConnection GetConnection()
+    {
+        string connectionString = getConnectionString();
+        return new SqlConnection(connectionString);
+    }
+
     private void BtnPlay_Click(object sender, EventArgs e)
     {
-        GameBoard gameBoard = new GameBoard();
+        GameBoard gameBoard = new GameBoard(string txtUsername.Text);
         gameBoard.Show();
-        this.Close();
+        this.Hide();
     }
 
     private void btnSignIn_Click(object sender, EventArgs e)

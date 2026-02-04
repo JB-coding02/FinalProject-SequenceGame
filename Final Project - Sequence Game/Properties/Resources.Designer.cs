@@ -63,6 +63,16 @@ namespace Final_Project___Sequence_Game.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Letter_X_icon_34793 {
+            get {
+                object obj = ResourceManager.GetObject("Letter-X-icon_34793", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ZoomedInGameBoard {
             get {
                 object obj = ResourceManager.GetObject("ZoomedInGameBoard", resourceCulture);
