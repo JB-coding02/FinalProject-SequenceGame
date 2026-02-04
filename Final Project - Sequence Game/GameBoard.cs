@@ -57,4 +57,20 @@ namespace Final_Project___Sequence_Game
             return cardArray;
         }
     }
+
+    private void ImgGameBoard_Click(object sender, EventArgs e)
+    {
+        picZoomedInBoard.Visible = true;
+        picZoomedInBoard.Enabled = true;
+        picClose.Visible = true;
+        picClose.Enabled = true;
+    }
+
+    private void picClose_Click(object sender, EventArgs e)
+    {
+        picZoomedInBoard.Visible = false;
+        picZoomedInBoard.Enabled = false;
+        picClose.Visible = false;
+        picClose.Enabled = false;
+    }
 }
