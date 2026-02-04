@@ -95,6 +95,7 @@
             btnExitGame.TabIndex = 4;
             btnExitGame.Text = "Exit";
             btnExitGame.UseVisualStyleBackColor = true;
+            btnExitGame.Click += btnExitGame_Click;
             // 
             // lblPlayerEmail
             // 

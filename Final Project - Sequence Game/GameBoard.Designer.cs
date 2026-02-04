@@ -31,22 +31,21 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameBoard));
             ImgGameBoard = new PictureBox();
             pictureBox1 = new PictureBox();
-            imgZoomedInBoard = new PictureBox();
+            picZoomedInBoard = new PictureBox();
             picClose = new PictureBox();
+            btnFreeSpace1 = new Button();
             ((System.ComponentModel.ISupportInitialize)ImgGameBoard).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)imgZoomedInBoard).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picZoomedInBoard).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picClose).BeginInit();
             SuspendLayout();
             // 
             // ImgGameBoard
             // 
             ImgGameBoard.Image = (Image)resources.GetObject("ImgGameBoard.Image");
-            ImgGameBoard.Location = new Point(8, 7);
-            ImgGameBoard.Margin = new Padding(2);
+            ImgGameBoard.Location = new Point(13, 86);
             ImgGameBoard.Name = "ImgGameBoard";
-            ImgGameBoard.Size = new Size(405, 565);
-            ImgGameBoard.SizeMode = PictureBoxSizeMode.AutoSize;
+            ImgGameBoard.Size = new Size(521, 638);
             ImgGameBoard.TabIndex = 0;
             ImgGameBoard.TabStop = false;
             ImgGameBoard.Click += ImgGameBoard_Click;
@@ -54,50 +53,69 @@
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(428, 7);
+            pictureBox1.Location = new Point(13, 14);
+            pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(521, 64);
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
-            // imgZoomedInBoard
+            // picZoomedInBoard
             // 
-            imgZoomedInBoard.Image = (Image)resources.GetObject("imgZoomedInBoard.Image");
-            imgZoomedInBoard.Location = new Point(9, 7);
-            imgZoomedInBoard.Name = "imgZoomedInBoard";
-            imgZoomedInBoard.Size = new Size(940, 762);
-            imgZoomedInBoard.SizeMode = PictureBoxSizeMode.AutoSize;
-            imgZoomedInBoard.TabIndex = 2;
-            imgZoomedInBoard.TabStop = false;
-            imgZoomedInBoard.Visible = false;
+            picZoomedInBoard.Enabled = false;
+            picZoomedInBoard.Image = (Image)resources.GetObject("picZoomedInBoard.Image");
+            picZoomedInBoard.Location = new Point(12, 12);
+            picZoomedInBoard.Name = "picZoomedInBoard";
+            picZoomedInBoard.Size = new Size(933, 807);
+            picZoomedInBoard.TabIndex = 2;
+            picZoomedInBoard.TabStop = false;
+            picZoomedInBoard.Visible = false;
             // 
             // picClose
             // 
-            picClose.Image = Properties.Resources.Letter_X_icon_34793;
-            picClose.Location = new Point(877, 7);
+            picClose.Enabled = false;
+            picClose.Image = (Image)resources.GetObject("picClose.Image");
+            picClose.Location = new Point(881, 12);
             picClose.Name = "picClose";
-            picClose.Size = new Size(72, 72);
+            picClose.Size = new Size(64, 64);
             picClose.SizeMode = PictureBoxSizeMode.AutoSize;
             picClose.TabIndex = 3;
             picClose.TabStop = false;
+            picClose.Visible = false;
+            picClose.Click += picClose_Click;
+            // 
+            // btnFreeSpace1
+            // 
+            btnFreeSpace1.FlatAppearance.BorderColor = Color.Yellow;
+            btnFreeSpace1.FlatAppearance.BorderSize = 2;
+            btnFreeSpace1.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            btnFreeSpace1.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            btnFreeSpace1.FlatStyle = FlatStyle.Flat;
+            btnFreeSpace1.ForeColor = Color.Transparent;
+            btnFreeSpace1.Location = new Point(29, 92);
+            btnFreeSpace1.Name = "btnFreeSpace1";
+            btnFreeSpace1.Size = new Size(86, 67);
+            btnFreeSpace1.TabIndex = 4;
+            btnFreeSpace1.UseVisualStyleBackColor = true;
+            btnFreeSpace1.Visible = false;
             // 
             // GameBoard
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(961, 808);
+            ClientSize = new Size(961, 963);
+            Controls.Add(btnFreeSpace1);
             Controls.Add(picClose);
-            Controls.Add(imgZoomedInBoard);
+            Controls.Add(picZoomedInBoard);
             Controls.Add(pictureBox1);
             Controls.Add(ImgGameBoard);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(2);
             Name = "GameBoard";
             Text = "Game Board";
             ((System.ComponentModel.ISupportInitialize)ImgGameBoard).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)imgZoomedInBoard).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picZoomedInBoard).EndInit();
             ((System.ComponentModel.ISupportInitialize)picClose).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -107,7 +125,8 @@
 
         private PictureBox ImgGameBoard;
         private PictureBox pictureBox1;
-        private PictureBox imgZoomedInBoard;
+        private PictureBox picZoomedInBoard;
         private PictureBox picClose;
+        private Button btnFreeSpace1;
     }
 }
