@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Data.SqlClient;
 
 namespace Final_Project___Sequence_Game;
 
@@ -56,5 +55,21 @@ public partial class GameBoard : Form
         {  "FREE", "AD", "KD", "QD", "10D", "9D", "8D", "7D", "6D", "FREE" }
         };
         return cardArray;
+    }
+
+    private void ImgGameBoard_Click(object sender, EventArgs e)
+    {
+        picZoomedInBoard.Visible = true;
+        picZoomedInBoard.Enabled = true;
+        picClose.Visible = true;
+        picClose.Enabled = true;
+    }
+
+    private void picClose_Click(object sender, EventArgs e)
+    {
+        picZoomedInBoard.Visible = false;
+        picZoomedInBoard.Enabled = false;
+        picClose.Visible = false;
+        picClose.Enabled = false;
     }
 }
