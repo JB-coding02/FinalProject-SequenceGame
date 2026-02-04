@@ -32,10 +32,11 @@
             ImgGameBoard = new PictureBox();
             pictureBox1 = new PictureBox();
             imgZoomedInBoard = new PictureBox();
-            btnCloseZoomedInBoard = new Button();
+            picClose = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)ImgGameBoard).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)imgZoomedInBoard).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picClose).BeginInit();
             SuspendLayout();
             // 
             // ImgGameBoard
@@ -63,7 +64,7 @@
             // imgZoomedInBoard
             // 
             imgZoomedInBoard.Image = (Image)resources.GetObject("imgZoomedInBoard.Image");
-            imgZoomedInBoard.Location = new Point(8, 23);
+            imgZoomedInBoard.Location = new Point(9, 7);
             imgZoomedInBoard.Name = "imgZoomedInBoard";
             imgZoomedInBoard.Size = new Size(940, 762);
             imgZoomedInBoard.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -71,21 +72,22 @@
             imgZoomedInBoard.TabStop = false;
             imgZoomedInBoard.Visible = false;
             // 
-            // btnCloseZoomedInBoard
+            // picClose
             // 
-            btnCloseZoomedInBoard.Location = new Point(916, 7);
-            btnCloseZoomedInBoard.Name = "btnCloseZoomedInBoard";
-            btnCloseZoomedInBoard.Size = new Size(32, 23);
-            btnCloseZoomedInBoard.TabIndex = 3;
-            btnCloseZoomedInBoard.UseVisualStyleBackColor = true;
-            btnCloseZoomedInBoard.Visible = false;
+            picClose.Image = Properties.Resources.Letter_X_icon_34793;
+            picClose.Location = new Point(877, 7);
+            picClose.Name = "picClose";
+            picClose.Size = new Size(72, 72);
+            picClose.SizeMode = PictureBoxSizeMode.AutoSize;
+            picClose.TabIndex = 3;
+            picClose.TabStop = false;
             // 
             // GameBoard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(961, 808);
-            Controls.Add(btnCloseZoomedInBoard);
+            Controls.Add(picClose);
             Controls.Add(imgZoomedInBoard);
             Controls.Add(pictureBox1);
             Controls.Add(ImgGameBoard);
@@ -96,6 +98,7 @@
             ((System.ComponentModel.ISupportInitialize)ImgGameBoard).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)imgZoomedInBoard).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picClose).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -105,6 +108,6 @@
         private PictureBox ImgGameBoard;
         private PictureBox pictureBox1;
         private PictureBox imgZoomedInBoard;
-        private Button btnCloseZoomedInBoard;
+        private PictureBox picClose;
     }
 }
