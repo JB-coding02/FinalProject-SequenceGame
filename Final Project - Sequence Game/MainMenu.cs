@@ -17,7 +17,7 @@ public partial class MainMenu : Form
     {
         InitializeComponent();
 
-        txtPlayerEmail.Text = Email;
+        txtEmail.Text = Email;
         txtUsername.Text = Username;
     }
 
