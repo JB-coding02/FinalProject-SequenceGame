@@ -58,8 +58,43 @@ public partial class GameBoard : Form
         return cardArray;
     }
 
+
     private void ImgGameBoard_Click(object sender, EventArgs e)
     {
-        imgZoomedInBoard.Visible = true;
+        ShowEnlargedGameBoard();
+    }
+
+    private void ShowEnlargedGameBoard()
+    {
+        picZoomedInBoard.Visible = true;
+        picZoomedInBoard.Enabled = true;
+        picClose.Visible = true;
+        picClose.Enabled = true;
+        picClose.BringToFront();
+        btnFreeSpace1.Visible = true;
+        btnFreeSpace1.Visible = true;
+        btnFreeSpace1.BringToFront();
+        btnFreeSpace1.Enabled = true;
+        btnFreeSpace2.Visible = true;
+        btnFreeSpace2.BringToFront();
+        btnFreeSpace2.Enabled = true;
+    }
+
+    private void picClose_Click(object sender, EventArgs e)
+    {
+        picZoomedInBoard.Visible = false;
+        picZoomedInBoard.Enabled = false;
+        picClose.Visible = false;
+        picClose.Enabled = false;
+    }
+
+    private void btnFreeSpace1_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("You clicked the free space!");
+    }
+
+    private void btnFreeSpace2_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("You clicked the free space!");
     }
 }

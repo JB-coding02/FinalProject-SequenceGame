@@ -8,12 +8,25 @@ namespace Final_Project___Sequence_Game;
 
 public partial class MainMenu : Form
 {
-    public MainMenu(string Username, string Email)
+
+    public MainMenu()
     {
         InitializeComponent();
-        txtUsername.Text = Username;
-        txtEmail.Text = Email;
     }
+
+    public MainMenu(string? Username, string? Email)
+    {
+        InitializeComponent();
+
+        txtEmail.Text = Email;
+        txtUsername.Text = Username;
+    }
+
+    public void getConnection()
+    {
+        string connString = getConnectionString();
+    }
+
 
     public string getConnectionString()
     {
@@ -38,7 +51,7 @@ public partial class MainMenu : Form
 
     private void BtnPlay_Click(object sender, EventArgs e)
     {
-        GameBoard gameBoard = new GameBoard(string txtUsername.Text);
+        GameBoard gameBoard = new GameBoard(txtUsername.Text);
         gameBoard.Show();
         this.Hide();
     }
@@ -48,5 +61,10 @@ public partial class MainMenu : Form
         SignIn signIn = new SignIn();
         signIn.Show();
         this.Hide();
+    }
+
+    private void btnExitGame_Click(object sender, EventArgs e)
+    {
+        this.Close();
     }
 }
