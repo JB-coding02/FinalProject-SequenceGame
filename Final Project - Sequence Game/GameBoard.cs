@@ -63,6 +63,7 @@ public partial class GameBoard : Form
     {
         picZoomedInBoard.Visible = true;
         picZoomedInBoard.Enabled = true;
+        picClose.BringToFront();
         picClose.Visible = true;
         picClose.Enabled = true;
     }

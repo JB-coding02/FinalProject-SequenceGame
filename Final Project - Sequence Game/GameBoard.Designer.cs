@@ -104,9 +104,9 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(961, 963);
-            Controls.Add(btnFreeSpace1);
+            ClientSize = new Size(959, 835);
             Controls.Add(picClose);
+            Controls.Add(btnFreeSpace1);
             Controls.Add(picZoomedInBoard);
             Controls.Add(pictureBox1);
             Controls.Add(ImgGameBoard);
