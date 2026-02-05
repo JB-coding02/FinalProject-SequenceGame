@@ -68,7 +68,7 @@
             picZoomedInBoard.Image = (Image)resources.GetObject("picZoomedInBoard.Image");
             picZoomedInBoard.Location = new Point(12, 12);
             picZoomedInBoard.Name = "picZoomedInBoard";
-            picZoomedInBoard.Size = new Size(933, 807);
+            picZoomedInBoard.Size = new Size(1386, 933);
             picZoomedInBoard.TabIndex = 2;
             picZoomedInBoard.TabStop = false;
             picZoomedInBoard.Visible = false;
@@ -124,7 +124,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(959, 835);
+            ClientSize = new Size(1410, 957);
             Controls.Add(btnFreeSpace2);
             Controls.Add(picClose);
             Controls.Add(btnFreeSpace1);

@@ -36,33 +36,34 @@
             txtUsername = new TextBox();
             lblUsername = new Label();
             lblReEnterPassword = new Label();
-            textBox1 = new TextBox();
+            txtConfirmPass = new TextBox();
             SuspendLayout();
             // 
             // txtPassword
             // 
             txtPassword.Font = new Font("Segoe UI", 12F);
-            txtPassword.Location = new Point(120, 74);
+            txtPassword.Location = new Point(171, 123);
+            txtPassword.Margin = new Padding(4, 5, 4, 5);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(151, 29);
+            txtPassword.Size = new Size(214, 39);
             txtPassword.TabIndex = 25;
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
             lblPassword.Font = new Font("Segoe UI", 12F);
-            lblPassword.Location = new Point(34, 76);
+            lblPassword.Location = new Point(49, 127);
+            lblPassword.Margin = new Padding(4, 0, 4, 0);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(79, 21);
+            lblPassword.Size = new Size(116, 32);
             lblPassword.TabIndex = 24;
             lblPassword.Text = "Password:";
             // 
             // btnCreateAccount
             // 
-            btnCreateAccount.Location = new Point(8, 166);
-            btnCreateAccount.Margin = new Padding(2, 2, 2, 2);
+            btnCreateAccount.Location = new Point(11, 277);
             btnCreateAccount.Name = "btnCreateAccount";
-            btnCreateAccount.Size = new Size(284, 53);
+            btnCreateAccount.Size = new Size(406, 88);
             btnCreateAccount.TabIndex = 23;
             btnCreateAccount.Text = "Create Account";
             btnCreateAccount.UseVisualStyleBackColor = true;
@@ -71,36 +72,40 @@
             // txtEmail
             // 
             txtEmail.Font = new Font("Segoe UI", 12F);
-            txtEmail.Location = new Point(120, 39);
+            txtEmail.Location = new Point(171, 65);
+            txtEmail.Margin = new Padding(4, 5, 4, 5);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(151, 29);
+            txtEmail.Size = new Size(214, 39);
             txtEmail.TabIndex = 21;
             // 
             // lblEmail
             // 
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 12F);
-            lblEmail.Location = new Point(62, 41);
+            lblEmail.Location = new Point(89, 68);
+            lblEmail.Margin = new Padding(4, 0, 4, 0);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(51, 21);
+            lblEmail.Size = new Size(76, 32);
             lblEmail.TabIndex = 20;
             lblEmail.Text = "Email:";
             // 
             // txtUsername
             // 
             txtUsername.Font = new Font("Segoe UI", 12F);
-            txtUsername.Location = new Point(120, 4);
+            txtUsername.Location = new Point(171, 7);
+            txtUsername.Margin = new Padding(4, 5, 4, 5);
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(151, 29);
+            txtUsername.Size = new Size(214, 39);
             txtUsername.TabIndex = 19;
             // 
             // lblUsername
             // 
             lblUsername.AutoSize = true;
             lblUsername.Font = new Font("Segoe UI", 12F);
-            lblUsername.Location = new Point(27, 5);
+            lblUsername.Location = new Point(39, 8);
+            lblUsername.Margin = new Padding(4, 0, 4, 0);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(84, 21);
+            lblUsername.Size = new Size(126, 32);
             lblUsername.TabIndex = 18;
             lblUsername.Text = "Username:";
             // 
@@ -108,26 +113,28 @@
             // 
             lblReEnterPassword.AutoSize = true;
             lblReEnterPassword.Font = new Font("Segoe UI", 9F);
-            lblReEnterPassword.Location = new Point(3, 116);
+            lblReEnterPassword.Location = new Point(4, 193);
+            lblReEnterPassword.Margin = new Padding(4, 0, 4, 0);
             lblReEnterPassword.Name = "lblReEnterPassword";
-            lblReEnterPassword.Size = new Size(107, 15);
+            lblReEnterPassword.Size = new Size(160, 25);
             lblReEnterPassword.TabIndex = 26;
             lblReEnterPassword.Text = "Confirm Password:";
             // 
-            // textBox1
+            // txtConfirmPass
             // 
-            textBox1.Font = new Font("Segoe UI", 12F);
-            textBox1.Location = new Point(120, 111);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(151, 29);
-            textBox1.TabIndex = 27;
+            txtConfirmPass.Font = new Font("Segoe UI", 12F);
+            txtConfirmPass.Location = new Point(171, 185);
+            txtConfirmPass.Margin = new Padding(4, 5, 4, 5);
+            txtConfirmPass.Name = "txtConfirmPass";
+            txtConfirmPass.Size = new Size(214, 39);
+            txtConfirmPass.TabIndex = 27;
             // 
             // CreateAccount
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(300, 226);
-            Controls.Add(textBox1);
+            ClientSize = new Size(429, 377);
+            Controls.Add(txtConfirmPass);
             Controls.Add(lblReEnterPassword);
             Controls.Add(txtPassword);
             Controls.Add(lblPassword);
@@ -136,7 +143,6 @@
             Controls.Add(lblEmail);
             Controls.Add(txtUsername);
             Controls.Add(lblUsername);
-            Margin = new Padding(2, 2, 2, 2);
             Name = "CreateAccount";
             Text = "Create Account";
             ResumeLayout(false);
@@ -153,6 +159,6 @@
         private TextBox txtUsername;
         private Label lblUsername;
         private Label lblReEnterPassword;
-        private TextBox textBox1;
+        private TextBox txtConfirmPass;
     }
 }
