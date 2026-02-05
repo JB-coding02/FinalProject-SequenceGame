@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
@@ -11,7 +12,13 @@ namespace Final_Project___Sequence_Game;
 
 public partial class GameBoard : Form
 {
-    public GameBoard(string? PlayerUsername)
+	/// <summary>
+	/// The players username is passed to the GameBoard form 
+    /// so that it can be used to track the players progress and 
+    /// update the database with their wins and losses.
+	/// </summary>
+	/// <param name="PlayerUsername"></param>
+	public GameBoard(string? PlayerUsername)
     {
         InitializeComponent();
     }
@@ -59,12 +66,21 @@ public partial class GameBoard : Form
     }
 
 
-    private void ImgGameBoard_Click(object sender, EventArgs e)
+	/// <summary>
+	/// Displays an enlarged version of the game board when the player clicks on the game board.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void ImgGameBoard_Click(object sender, EventArgs e)
     {
         ShowEnlargedGameBoard();
     }
 
-    private void ShowEnlargedGameBoard()
+	/// <summary>
+	/// Shows a maginified version of the gameboard image, 
+    /// along with a close button and buttons for the free spaces on the game board.
+	/// </summary>
+	private void ShowEnlargedGameBoard()
     {
         picZoomedInBoard.Visible = true;
         picZoomedInBoard.Enabled = true;
@@ -80,7 +96,12 @@ public partial class GameBoard : Form
         btnFreeSpace2.Enabled = true;
     }
 
-    private void picClose_Click(object sender, EventArgs e)
+	/// <summary>
+	/// Closes enlarged image of the game board when the player clicks the close button.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void picClose_Click(object sender, EventArgs e)
     {
         picZoomedInBoard.Visible = false;
         picZoomedInBoard.Enabled = false;
@@ -88,12 +109,22 @@ public partial class GameBoard : Form
         picClose.Enabled = false;
     }
 
-    private void btnFreeSpace1_Click(object sender, EventArgs e)
+	/// <summary>
+	/// detects when the player clicks on the free space buttons and displays a message box to confirm that they have clicked on the free space.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void btnFreeSpace1_Click(object sender, EventArgs e)
     {
         MessageBox.Show("You clicked the free space!");
     }
 
-    private void btnFreeSpace2_Click(object sender, EventArgs e)
+	/// <summary>
+	/// detects when the player clicks on the free space buttons and displays a message box to confirm that they have clicked on the free space.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void btnFreeSpace2_Click(object sender, EventArgs e)
     {
         MessageBox.Show("You clicked the free space!");
     }

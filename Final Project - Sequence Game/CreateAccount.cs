@@ -200,8 +200,13 @@ namespace Final_Project___Sequence_Game
             string connectionString = getConnectionString();
             return new SqlConnection(connectionString);
         }
-
-        public string getConnectionString()
+		/// <summary>
+		/// This is used to expedite typing the SQl code multiple times throughout the code but, 
+        /// its main purpose is make it easier to connect to the database using a method call 
+        /// instead of having to type out the connection string each time a connection is needed.
+		/// </summary>
+		/// <returns>The SQL Database connection string.</returns>
+		public string getConnectionString()
         {
             return """
             Data Source=(localdb)\\MSSQLLocalDB;

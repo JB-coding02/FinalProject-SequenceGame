@@ -4,6 +4,14 @@ using System.Text;
 
 namespace Final_Project___Sequence_Game;
 
+/// <summary>
+/// This Array represents the 10x10 grid of cards that is used in the Sequence Game. 
+/// Each element of the array is a string that represents a card, 
+/// with the first character(s) representing the rank and the last character representing the suit. 
+/// For example, "2S" represents the 2 of Spades, "AH" represents the Ace of Hearts, 
+/// and "10D" represents the 10 of Diamonds. 
+/// The "FREE" elements represent the free spaces on the game board count as a pre-claimed space for all players.
+/// </summary>
 public class CardArray
 {
     public string[,] CreateCardArray()
