@@ -61,11 +61,23 @@ public partial class GameBoard : Form
 
     private void ImgGameBoard_Click(object sender, EventArgs e)
     {
+        ShowEnlargedGameBoard();
+    }
+
+    private void ShowEnlargedGameBoard()
+    {
         picZoomedInBoard.Visible = true;
         picZoomedInBoard.Enabled = true;
-        picClose.BringToFront();
         picClose.Visible = true;
         picClose.Enabled = true;
+        picClose.BringToFront();
+        btnFreeSpace1.Visible = true;
+        btnFreeSpace1.Visible = true;
+        btnFreeSpace1.BringToFront();
+        btnFreeSpace1.Enabled = true;
+        btnFreeSpace2.Visible = true;
+        btnFreeSpace2.BringToFront();
+        btnFreeSpace2.Enabled = true;
     }
 
     private void picClose_Click(object sender, EventArgs e)
@@ -74,5 +86,15 @@ public partial class GameBoard : Form
         picZoomedInBoard.Enabled = false;
         picClose.Visible = false;
         picClose.Enabled = false;
+    }
+
+    private void btnFreeSpace1_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("You clicked the free space!");
+    }
+
+    private void btnFreeSpace2_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("You clicked the free space!");
     }
 }
