@@ -11,7 +11,11 @@ namespace Final_Project___Sequence_Game;
 
 public partial class SignIn : Form
 {
-    public SignIn()
+	/// <summary>
+	/// checks user Sign In details against the database and allows them to sign in if their details match an account in the database,
+	/// and giving them the option to either create an account or play as a guest if they don't have an account or don't want to sign in.
+	/// </summary>
+	public SignIn()
     {
         InitializeComponent();
     }
@@ -164,7 +168,13 @@ public partial class SignIn : Form
             """;
     }
 
-    private void btnSignIn_Click(object sender, EventArgs e)
+	/// <summary>
+	/// Validates the entered Sign In details and allows the player to sign in if their details match an account in the database,
+	/// or gives them the option to create an account or play as a guest if they don't have an account or don't want to sign in.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void btnSignIn_Click(object sender, EventArgs e)
     {
         if (!txtUsername.Text.IsWhiteSpace() && !txtPassword.Text.IsWhiteSpace() && !txtEmail.Text.IsWhiteSpace())
         {
@@ -186,7 +196,14 @@ public partial class SignIn : Form
         }
     }
 
-    private void btnCreateAccount_Click(object sender, EventArgs e)
+	/// <summary>
+	/// takes the inputs from the Sign In form and opens the Create Account form, 
+    /// allowing the player to create an account with the entered details 
+    /// if they don't have an account or don't want to sign in,
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void btnCreateAccount_Click(object sender, EventArgs e)
     {
         CreateAccount createAccount = new CreateAccount();
         createAccount.Show();
