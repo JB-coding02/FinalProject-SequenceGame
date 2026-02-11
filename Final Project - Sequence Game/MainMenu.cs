@@ -15,6 +15,10 @@ public partial class MainMenu : Form
         txtEmail.Text = Email;
     }
 
+    public MainMenu()
+    {
+    }
+
     public string getConnectionString()
     {
         return """
@@ -38,7 +42,7 @@ public partial class MainMenu : Form
 
     private void BtnPlay_Click(object sender, EventArgs e)
     {
-        GameBoard gameBoard = new GameBoard(string txtUsername.Text);
+        GameBoard gameBoard = new GameBoard(txtUsername.Text);
         gameBoard.Show();
         this.Hide();
     }

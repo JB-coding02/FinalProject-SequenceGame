@@ -23,56 +23,62 @@ namespace Final_Project___Sequence_Game
         /// </summary>
         private void btnCreateAccount_Click(object sender, EventArgs e)
         {
-            if (!txtUsername.Text.IsWhiteSpace())
-            {
-                if (!txtPassword.Text.IsWhiteSpace())
-                {
-                    if (!txtEmail.Text.IsWhiteSpace())
-                    {
-                        bool UsernameExists = CheckUsername();
-                        bool EmailExists = CheckEmail();
-                        if (!UsernameExists && !EmailExists)
-                        {
-                            using (SqlConnection conn = new SqlConnection(getConnectionString()))
-                            {
-                                conn.Open();
-                                string query = 
-                                    $"""
-                                    INSERT INTO PlayerData 
-                                    (Username, Password, PlayerEmail) 
-                                    VALUES ('{txtUsername.Text}',
-                                    '{txtPassword.Text}',
-                                    '{txtEmail.Text}')
-                                    """;
-                                SqlCommand cmd = new SqlCommand(query, conn);
-                                cmd.ExecuteNonQuery();
-                                MessageBox.Show("Account created successfully!");
-                                this.Hide();
-                                SignIn signInForm = new SignIn();
-                                signInForm.Show();
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("One or more of the entered details already exist. Please try again with different details.");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please enter an email.");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Please enter a password.");
-                }
-
-            }
-            else
+            // Fail-fast validation
+            if (txtUsername.Text.IsWhiteSpace())
             {
                 MessageBox.Show("Please enter a username.");
+                return;
             }
+
+            if (txtPassword.Text.IsWhiteSpace())
+            {
+                MessageBox.Show("Please enter a password.");
+                return;
+            }
+
+            if (txtEmail.Text.IsWhiteSpace())
+            {
+                MessageBox.Show("Please enter an email.");
+                return;
+            }
+
+            // Check for duplicates
+            bool usernameExists = CheckUsername();
+            bool emailExists = CheckEmail();
+
+            if (usernameExists || emailExists)
+            {
+                MessageBox.Show("One or more of the entered details already exist. Please try again with different details.");
+                return;
+            }
+
+            // Insert new account using parameterized SQL
+            using (SqlConnection conn = new SqlConnection(getConnectionString()))
+            {
+                conn.Open();
+
+                string query =
+                    """
+                    INSERT INTO PlayerData 
+                    (Username, Password, PlayerEmail)
+                    VALUES (@Username, @Password, @Email)
+                    """;
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", txtUsername.Text);
+                    cmd.Parameters.AddWithValue("@Password", txtPassword.Text);
+                    cmd.Parameters.AddWithValue("@Email", txtEmail.Text);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            MessageBox.Show("Account created successfully!");
+            this.Hide();
+            new SignIn().Show();
         }
+
 
         /// <summary>
         /// Checks if the entered Username matches 
