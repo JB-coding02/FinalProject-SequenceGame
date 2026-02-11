@@ -72,7 +72,6 @@ public partial class GameBoard : Form
         picClose.Enabled = true;
         picClose.BringToFront();
         btnFreeSpace1.Visible = true;
-        btnFreeSpace1.Visible = true;
         btnFreeSpace1.BringToFront();
         btnFreeSpace1.Enabled = true;
         btnFreeSpace2.Visible = true;
@@ -86,6 +85,7 @@ public partial class GameBoard : Form
         picZoomedInBoard.Enabled = false;
         picClose.Visible = false;
         picClose.Enabled = false;
+
     }
 
     private void btnFreeSpace1_Click(object sender, EventArgs e)
