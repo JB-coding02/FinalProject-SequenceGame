@@ -167,7 +167,4 @@ public partial class GameBoard : Form
         };
         return cardArray;
     }
-
-
-
 }
