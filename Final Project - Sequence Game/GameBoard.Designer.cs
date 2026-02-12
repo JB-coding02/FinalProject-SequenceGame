@@ -35,6 +35,7 @@
             // 
             // picZoomedInBoard
             // 
+            picZoomedInBoard.BackColor = Color.Transparent;
             picZoomedInBoard.Image = Properties.Resources.EnlargedGameBoard;
             picZoomedInBoard.Location = new Point(12, 12);
             picZoomedInBoard.Name = "picZoomedInBoard";
@@ -47,7 +48,8 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1138, 924);
+            BackColor = Color.FromArgb(192, 192, 0);
+            ClientSize = new Size(1682, 924);
             Controls.Add(picZoomedInBoard);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "GameBoard";
