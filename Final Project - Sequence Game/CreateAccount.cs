@@ -23,87 +23,55 @@ namespace Final_Project___Sequence_Game
         /// </summary>
         private void btnCreateAccount_Click(object sender, EventArgs e)
         {
-            // Validate inputs first
-            if (!ValidateInputs(out string username, out string password, out string email))
-                return;
-
-            // Check uniqueness
-            bool usernameExists = CheckUsernameExists(username);
-            bool emailExists = CheckEmailExists(email);
-
-            if (usernameExists)
+            if (!txtUsername.Text.IsWhiteSpace())
             {
-                MessageBox.Show("Username already exists. Please choose a different username.");
-                txtUsername.BackColor = Color.DarkRed;
-                return;
+                if (!txtPassword.Text.IsWhiteSpace())
+                {
+                    if (!txtEmail.Text.IsWhiteSpace())
+                    {
+                        bool UsernameExists = CheckUsername();
+                        bool EmailExists = CheckEmail();
+                        if (!UsernameExists && !EmailExists)
+                        {
+                            using (SqlConnection conn = new SqlConnection(getConnectionString()))
+                            {
+                                conn.Open();
+                                string query = 
+                                    $"""
+                                    INSERT INTO PlayerData 
+                                    (Username, Password, PlayerEmail) 
+                                    VALUES ('{txtUsername.Text}',
+                                    '{txtPassword.Text}',
+                                    '{txtEmail.Text}')
+                                    """;
+                                SqlCommand cmd = new SqlCommand(query, conn);
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Account created successfully!");
+                                this.Hide();
+                                SignIn signInForm = new SignIn();
+                                signInForm.Show();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("One or more of the entered details already exist. Please try again with different details.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter an email.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a password.");
+                }
+
             }
-
-            if (emailExists)
-            {
-                MessageBox.Show("An account with this email already exists.");
-                txtEmail.BackColor = Color.DarkRed;
-                return;
-            }
-
-            // All checks passed, create the account
-            PassedChecks(username, password, email);
-        }
-
-        private bool ValidateInputs(out string username, out string password, out string email)
-        {
-            username = txtUsername.Text?.Trim() ?? string.Empty;
-            password = txtPassword.Text?.Trim() ?? string.Empty;
-            email = txtEmail.Text?.Trim() ?? string.Empty;
-
-            if (string.IsNullOrWhiteSpace(username))
+            else
             {
                 MessageBox.Show("Please enter a username.");
-                return false;
             }
-
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                MessageBox.Show("Please enter a password.");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                MessageBox.Show("Please enter an email.");
-                return false;
-            }
-
-            try
-            {
-                // Basic email validation
-                var _ = new System.Net.Mail.MailAddress(email);
-            }
-            catch
-            {
-                MessageBox.Show("Please enter a valid email address.");
-                return false;
-            }
-
-            return true;
-        }
-
-        private void PassedChecks(string username, string password, string email)
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            {
-                conn.Open();
-                const string insertSql = @"INSERT INTO PlayerData (Username, PasswordHash, PlayerEmail) VALUES (@username, @password, @email);";
-                using SqlCommand cmd = new SqlCommand(insertSql, conn);
-                cmd.Parameters.AddWithValue("@username", username);
-                cmd.Parameters.AddWithValue("@password", password);
-                cmd.Parameters.AddWithValue("@email", email);
-                cmd.ExecuteNonQuery();
-            }
-
-            MessageBox.Show("Account created successfully!");
-            this.Hide();
-            SignIn signInForm = new SignIn();
-            signInForm.Show();
         }
 
         /// <summary>
@@ -112,47 +80,78 @@ namespace Final_Project___Sequence_Game
         /// </summary>
         /// <returns>True if the entered Username matches a stored 
         /// Username for an account, but returns false if it doesn't match</returns>
-        /// <summary>
-        /// Returns true when the username already exists in the database.
-        /// </summary>
-        public bool CheckUsernameExists(string username)
+        public bool CheckUsername()
         {
-            if (string.IsNullOrWhiteSpace(username))
-                return false;
-
-            using (SqlConnection conn = GetSqlConnection())
+            bool UsernameMatch = true;
+            if (!txtUsername.Text.IsWhiteSpace())
             {
-                conn.Open();
-                const string sql = "SELECT COUNT(1) FROM PlayerData WHERE Username = @username";
-                using SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@username", username);
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
+                using (SqlConnection conn = new SqlConnection(getConnectionString()))
+                {
+                    conn.Open();
+                    string query = 
+                        $"""
+                        SELECT Username 
+                        FROM PlayerData 
+                        WHERE Username = '{txtUsername.Text}'
+                        """;
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["Username"].ToString() != txtUsername.Text)
+                        {
+                            UsernameMatch = false;
+                            txtUsername.BackColor = Color.LightGreen;
+                            break;
+                        }
+                        else
+                        {
+                            txtUsername.BackColor = Color.DarkRed;
+                            break;
+                        }
+                    }
+                }
             }
+            return UsernameMatch;
         }
         /// <summary>
         /// Checks if the entered password matches one in the database.
         /// </summary>
         /// <returns>True if the entered password matches a stored 
         /// password for an account, but returns false if it doesn't match</returns>
-        /// <summary>
-        /// Returns true if the supplied password exists in the database (compares against PasswordHash column).
-        /// Note: This function performs a direct string comparison against the stored value.
-        /// </summary>
-        public bool CheckPassword(string password)
+        public bool CheckPassword()
         {
-            if (string.IsNullOrWhiteSpace(password))
-                return false;
-
-            using (SqlConnection conn = GetSqlConnection())
+            bool PasswordMatch = true;
+            if (!txtPassword.Text.IsWhiteSpace())
             {
-                conn.Open();
-                const string sql = "SELECT COUNT(1) FROM PlayerData WHERE PasswordHash = @password";
-                using SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@password", password);
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
+                using (SqlConnection conn = new SqlConnection(getConnectionString()))
+                {
+                    conn.Open();
+                    string PasswordQuery = $"""
+                        SELECT PasswordHash 
+                        FROM PlayerData 
+                        WHERE PasswordHash = '{txtPassword.Text}'
+                        """;
+                    SqlCommand PasswordCmd = new SqlCommand(PasswordQuery, conn);
+                    SqlDataReader PasswordReader = PasswordCmd.ExecuteReader();
+
+                    while (PasswordReader.Read())
+                    {
+                        if (PasswordReader["Password"].ToString() == txtPassword.Text)
+                        {
+                            PasswordMatch = false;
+                            txtPassword.BackColor = Color.LightGreen;
+                            break;
+                        }
+                        else
+                        {
+                            txtPassword.BackColor = Color.DarkRed;
+                            break;
+                        }
+                    }
+                }
             }
+            return PasswordMatch;
         }
 
         /// <summary>
@@ -161,23 +160,39 @@ namespace Final_Project___Sequence_Game
         /// </summary>
         /// <returns>True if the entered Email matches a stored 
         /// Email for an account, but returns false if it doesn't match</returns>
-        /// <summary>
-        /// Returns true when the email already exists in the database.
-        /// </summary>
-        public bool CheckEmailExists(string email)
+        public bool CheckEmail()
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
-
-            using (SqlConnection conn = GetSqlConnection())
+            bool EmailMatch = true;
+            if (!txtEmail.Text.IsWhiteSpace())
             {
-                conn.Open();
-                const string sql = "SELECT COUNT(1) FROM PlayerData WHERE PlayerEmail = @email";
-                using SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@email", email);
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
+                using (SqlConnection conn = GetSqlConnection())
+                {
+                    conn.Open();
+                    string EmailQuery = $"""
+                        SELECT PlayerEmail 
+                        FROM PlayerData 
+                        WHERE PlayerEmail = '{txtEmail.Text}'
+                        """;
+                    SqlCommand EmailCmd = new SqlCommand(EmailQuery, conn);
+                    SqlDataReader EmailReader = EmailCmd.ExecuteReader();
+
+                    while (EmailReader.Read())
+                    {
+                        if (EmailReader["PlayerEmail"].ToString() == txtEmail.Text)
+                        {
+                            EmailMatch = false;
+                            txtEmail.BackColor = Color.LightGreen;
+                            break;
+                        }
+                        else
+                        {
+                            txtEmail.BackColor = Color.DarkRed;
+                            break;
+                        }
+                    }
+                }
             }
+            return EmailMatch;
         }
 
         public SqlConnection GetSqlConnection()
@@ -189,12 +204,14 @@ namespace Final_Project___Sequence_Game
         public string getConnectionString()
         {
             return """
-            Data Source=(localdb)\MSSQLLocalDB;
+            Data Source=(localdb)\\MSSQLLocalDB;
             Initial Catalog=SequenceGameDB;
             Integrated Security=True;
             Connect Timeout=30;
             Encrypt=True;
-            Trust Server Certificate=False;
+            Trust Server Certificate=True;
+            Application Intent=ReadWrite;M
+            ulti Subnet Failover=False;
             Command Timeout=30
             """;
         }
