@@ -31,14 +31,12 @@ public partial class MainMenu : Form
     public string getConnectionString()
     {
         return """
-            Data Source=(localdb)\\MSSQLLocalDB;
+            Data Source=(localdb)\MSSQLLocalDB;
             Initial Catalog=SequenceGameDB;
             Integrated Security=True;
             Connect Timeout=30;
             Encrypt=True;
-            Trust Server Certificate=True;
-            Application Intent=ReadWrite;M
-            ulti Subnet Failover=False;
+            Trust Server Certificate=False;
             Command Timeout=30
             """;
     }

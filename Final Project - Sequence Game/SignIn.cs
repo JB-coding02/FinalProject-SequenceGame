@@ -17,130 +17,38 @@ public partial class SignIn : Form
     }
 
     /// <summary>
-    /// Checks if the entered Username matches 
-    /// another Username stored in the database.
+    /// Attempts to authenticate a user by username and password.
+    /// On success returns true and outputs the associated email.
+    /// Uses parameterized query to avoid SQL injection.
     /// </summary>
-    /// <returns>True if the entered Username matches the stored 
-    /// Username for that account, but returns false if it doesn't match</returns>
-    public bool CheckUsername()
+    public bool TryAuthenticate(string username, string password, out string email)
     {
-        bool UsernameMatch = false;
-        if (!txtUsername.Text.IsWhiteSpace())
+        email = string.Empty;
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            return false;
+
+        using (SqlConnection conn = GetSqlConnection())
         {
-            using (SqlConnection conn = GetSqlConnection())
+            conn.Open();
+            const string sql = @"SELECT PlayerEmail FROM PlayerData WHERE Username = @username AND PasswordHash = @password";
+            using SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@username", username);
+            cmd.Parameters.AddWithValue("@password", password);
+            object result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
             {
-                conn.Open();
-                string query =
-                    $"""
-                        SELECT Username 
-                        FROM PlayerData 
-                        WHERE Username = '{txtUsername.Text}',
-                        PlayerEmail = '{txtEmail.Text}',
-                        PasswordHash = '{txtPassword.Text}'
-                        """; // example table
-                SqlCommand cmd = new SqlCommand(query, conn);
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    if (reader["Username"].ToString() == txtUsername.Text)
-                    {
-                        UsernameMatch = true;
-                        txtUsername.BackColor = Color.LightGreen;
-                        break;
-                    }
-                    else
-                    {
-                        txtUsername.BackColor = Color.DarkRed;
-                        break;
-                    }
-                }
+                email = Convert.ToString(result);
+                txtUsername.BackColor = Color.LightGreen;
+                txtPassword.BackColor = Color.LightGreen;
+                return true;
+            }
+            else
+            {
+                txtUsername.BackColor = Color.DarkRed;
+                txtPassword.BackColor = Color.DarkRed;
+                return false;
             }
         }
-        return UsernameMatch;
-    }
-    /// <summary>
-    /// Checks if the entered password Matches one in the database.
-    /// </summary>
-    /// <returns>True if the entered password matches the stored 
-    /// password for that account, but returns false if it doesn't match</returns>
-    public bool CheckPassword()
-    {
-        bool PasswordMatch = false;
-        if (!txtPassword.Text.IsWhiteSpace())
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            {
-                conn.Open();
-                string PasswordQuery = $"""
-                        SELECT PasswordHash 
-                        FROM PlayerData 
-                        WHERE PasswordHash = '{txtPassword.Text}',
-                        PlayerEmail = '{txtEmail.Text}',
-                        Username = '{txtUsername.Text}'
-                        """;
-                SqlCommand PasswordCmd = new SqlCommand(PasswordQuery, conn);
-                SqlDataReader PasswordReader = PasswordCmd.ExecuteReader();
-
-                while (PasswordReader.Read())
-                {
-                    if (PasswordReader["Password"].ToString() == txtPassword.Text)
-                    {
-                        txtPassword.BackColor = Color.LightGreen;
-                        PasswordMatch = true;
-                        break;
-                    }
-                    else
-                    {
-                        txtPassword.BackColor = Color.DarkRed;
-                        break;
-                    }
-                }
-            }
-        }
-        return PasswordMatch;
-    }
-
-    /// <summary>
-    /// Checks if the entered Email matches 
-    /// another Email stored in the database.
-    /// </summary>
-    /// <returns>True if the entered Email matches the stored 
-    /// Email for that account, but returns false if it doesn't match</returns>
-    public bool CheckEmail()
-    {
-        bool EmailMatch = false;
-        if (!txtEmail.Text.IsWhiteSpace())
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            {
-                conn.Open();
-                string EmailQuery = $"""
-                        SELECT PlayerEmail 
-                        FROM PlayerData 
-                        WHERE PasswordHash = '{txtPassword.Text}',
-                        PlayerEmail = '{txtEmail.Text}',
-                        Username = '{txtUsername.Text}'
-                        """;
-                SqlCommand EmailCmd = new SqlCommand(EmailQuery, conn);
-                SqlDataReader EmailReader = EmailCmd.ExecuteReader();
-
-                while (EmailReader.Read())
-                {
-                    if (EmailReader["PlayerEmail"].ToString() == txtEmail.Text)
-                    {
-                        txtEmail.BackColor = Color.LightGreen;
-                        EmailMatch = true;
-                        break;
-                    }
-                    else
-                    {
-                        txtEmail.BackColor = Color.DarkRed;
-                        break;
-                    }
-                }
-            }
-        }
-        return EmailMatch;
     }
 
     public SqlConnection GetSqlConnection()
@@ -152,37 +60,39 @@ public partial class SignIn : Form
     public string getConnectionString()
     {
         return """
-            Data Source=(localdb)\\MSSQLLocalDB;
+            Data Source=(localdb)\MSSQLLocalDB;
             Initial Catalog=SequenceGameDB;
             Integrated Security=True;
             Connect Timeout=30;
             Encrypt=True;
-            Trust Server Certificate=True;
-            Application Intent=ReadWrite;M
-            ulti Subnet Failover=False;
+            Trust Server Certificate=False;
             Command Timeout=30
             """;
     }
 
+
+
     private void btnSignIn_Click(object sender, EventArgs e)
     {
-        if (!txtUsername.Text.IsWhiteSpace() && !txtPassword.Text.IsWhiteSpace() && !txtEmail.Text.IsWhiteSpace())
+        string username = txtUsername.Text?.Trim() ?? string.Empty;
+        string password = txtPassword.Text?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            if (CheckUsername() && CheckPassword() && CheckEmail())
-            {
-                MessageBox.Show("Sign In Successful!");
-                MainMenu mainMenu = new MainMenu(txtUsername.Text, txtEmail.Text);
-                mainMenu.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Sign In Failed. Please re-check your credentials.");
-            }
+            MessageBox.Show("Please enter both username and password.");
+            return;
+        }
+
+        if (TryAuthenticate(username, password, out string email))
+        {
+            MessageBox.Show("Sign In Successful!");
+            MainMenu mainMenu = new MainMenu(username, email);
+            mainMenu.Show();
+            this.Hide();
         }
         else
         {
-            MessageBox.Show("Please fill in all fields.");
+            MessageBox.Show("Sign In Failed. Please re-check your credentials.");
         }
     }
 
