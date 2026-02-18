@@ -16,71 +16,68 @@ namespace Final_Project___Sequence_Game
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Upon Create account button press checks if the entered 
-        /// details are valid and creates a new account in the 
-        /// database if the entered details are unique.
-        /// </summary>
-        private void btnCreateAccount_Click(object sender, EventArgs e)
-        {
-            if (!txtUsername.Text.IsWhiteSpace())
-            {
-                if (!txtPassword.Text.IsWhiteSpace())
-                {
-                    if (!txtEmail.Text.IsWhiteSpace())
-                    {
-                        bool UsernameExists = CheckUsername();
-                        bool EmailExists = CheckEmail();
-                        if (!UsernameExists && !EmailExists)
-                        {
-                            using (SqlConnection conn = new SqlConnection(getConnectionString()))
-                            {
-                                conn.Open();
-                                string query = 
-                                    $"""
-                                    INSERT INTO PlayerData 
-                                    (Username, Password, PlayerEmail) 
-                                    VALUES ('{txtUsername.Text}',
-                                    '{txtPassword.Text}',
-                                    '{txtEmail.Text}')
-                                    """;
-                                SqlCommand cmd = new SqlCommand(query, conn);
-                                cmd.ExecuteNonQuery();
-                                MessageBox.Show("Account created successfully!");
-                                this.Hide();
-                                SignIn signInForm = new SignIn();
-                                signInForm.Show();
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("One or more of the entered details already exist. Please try again with different details.");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please enter an email.");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Please enter a password.");
-                }
+		/// <summary>
+		/// Upon Create account button press checks if the entered 
+		/// details are valid and creates a new account in the 
+		/// database if the entered details are unique.
+		/// </summary>
+		private void btnCreateAccount_Click(object sender, EventArgs e)
+		{
+			if (txtUsername.Text.IsWhiteSpace())
+			{
+				MessageBox.Show("Please enter a username.");
+				return;
+			}
 
-            }
-            else
-            {
-                MessageBox.Show("Please enter a username.");
-            }
-        }
+			if (txtPassword.Text.IsWhiteSpace())
+			{
+				MessageBox.Show("Please enter a password.");
+				return;
+			}
 
-        /// <summary>
-        /// Checks if the entered Username matches 
-        /// another Username stored in the database.
-        /// </summary>
-        /// <returns>True if the entered Username matches a stored 
-        /// Username for an account, but returns false if it doesn't match</returns>
-        public bool CheckUsername()
+			if (txtEmail.Text.IsWhiteSpace())
+			{
+				MessageBox.Show("Please enter an email.");
+				return;
+			}
+
+			bool usernameExists = CheckUsername();
+			bool emailExists = CheckEmail();
+
+			if (usernameExists || emailExists)
+			{
+				MessageBox.Show("One or more of the entered details already exist. Please try again with different details.");
+				return;
+			}
+
+			using (SqlConnection conn = new SqlConnection(getConnectionString()))
+			{
+				conn.Open();
+
+				string query =
+					$"""
+            INSERT INTO PlayerData (Username, Password, PlayerEmail)
+            VALUES ('{txtUsername.Text}', '{txtPassword.Text}', '{txtEmail.Text}')
+            """;
+
+				SqlCommand cmd = new SqlCommand(query, conn);
+				cmd.ExecuteNonQuery();
+			}
+
+			MessageBox.Show("Account created successfully!");
+
+			this.Hide();
+			new SignIn().Show();
+		}
+
+
+		/// <summary>
+		/// Checks if the entered Username matches 
+		/// another Username stored in the database.
+		/// </summary>
+		/// <returns>True if the entered Username matches a stored 
+		/// Username for an account, but returns false if it doesn't match</returns>
+		public bool CheckUsername()
         {
             bool UsernameMatch = true;
             if (!txtUsername.Text.IsWhiteSpace())

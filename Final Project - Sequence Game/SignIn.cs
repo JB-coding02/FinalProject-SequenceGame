@@ -32,12 +32,12 @@ public partial class SignIn : Form
                 conn.Open();
                 string query =
                     $"""
-                        SELECT Username 
-                        FROM PlayerData 
-                        WHERE Username = '{txtUsername.Text}',
-                        PlayerEmail = '{txtEmail.Text}',
-                        PasswordHash = '{txtPassword.Text}'
-                        """; // example table
+                    SELECT Username 
+                    FROM PlayerData 
+                    WHERE Username = '{txtUsername.Text}',
+                    PlayerEmail = '{txtEmail.Text}',
+                    PasswordHash = '{txtPassword.Text}'
+                    """; // example table
                 SqlCommand cmd = new SqlCommand(query, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
