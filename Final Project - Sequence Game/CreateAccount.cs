@@ -1,11 +1,14 @@
-﻿using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Final_Project___Sequence_Game.Data;
+using Final_Project___Sequence_Game.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Final_Project___Sequence_Game
 {
@@ -29,28 +32,25 @@ namespace Final_Project___Sequence_Game
                 {
                     if (!txtEmail.Text.IsWhiteSpace())
                     {
-                        bool UsernameExists = CheckUsername();
-                        bool EmailExists = CheckEmail();
-                        if (!UsernameExists && !EmailExists)
+                        bool usernameExists = CheckUsername();
+                        bool emailExists = CheckEmail();
+                        if (!usernameExists && !emailExists)
                         {
-                            using (SqlConnection conn = new SqlConnection(getConnectionString()))
+                            using (var ctx = new SequenceGameContext())
                             {
-                                conn.Open();
-                                string query = 
-                                    $"""
-                                    INSERT INTO PlayerData 
-                                    (Username, Password, PlayerEmail) 
-                                    VALUES ('{txtUsername.Text}',
-                                    '{txtPassword.Text}',
-                                    '{txtEmail.Text}')
-                                    """;
-                                SqlCommand cmd = new SqlCommand(query, conn);
-                                cmd.ExecuteNonQuery();
-                                MessageBox.Show("Account created successfully!");
-                                this.Hide();
-                                SignIn signInForm = new SignIn();
-                                signInForm.Show();
+                                var player = new PlayerData
+                                {
+                                    Username = txtUsername.Text,
+                                    PasswordHash = txtPassword.Text,
+                                    PlayerEmail = txtEmail.Text
+                                };
+                                ctx.PlayerData.Add(player);
+                                ctx.SaveChanges();
                             }
+                            MessageBox.Show("Account created successfully!");
+                            this.Hide();
+                            SignIn signInForm = new SignIn();
+                            signInForm.Show();
                         }
                         else
                         {
@@ -82,37 +82,16 @@ namespace Final_Project___Sequence_Game
         /// Username for an account, but returns false if it doesn't match</returns>
         public bool CheckUsername()
         {
-            bool UsernameMatch = true;
+            bool exists = false;
             if (!txtUsername.Text.IsWhiteSpace())
             {
-                using (SqlConnection conn = new SqlConnection(getConnectionString()))
+                using (var ctx = new SequenceGameContext())
                 {
-                    conn.Open();
-                    string query = 
-                        $"""
-                        SELECT Username 
-                        FROM PlayerData 
-                        WHERE Username = '{txtUsername.Text}'
-                        """;
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["Username"].ToString() != txtUsername.Text)
-                        {
-                            UsernameMatch = false;
-                            txtUsername.BackColor = Color.LightGreen;
-                            break;
-                        }
-                        else
-                        {
-                            txtUsername.BackColor = Color.DarkRed;
-                            break;
-                        }
-                    }
+                    exists = ctx.PlayerData.Any(p => p.Username == txtUsername.Text);
                 }
+                txtUsername.BackColor = exists ? Color.DarkRed : Color.LightGreen;
             }
-            return UsernameMatch;
+            return exists;
         }
         /// <summary>
         /// Checks if the entered password matches one in the database.
@@ -121,37 +100,18 @@ namespace Final_Project___Sequence_Game
         /// password for an account, but returns false if it doesn't match</returns>
         public bool CheckPassword()
         {
-            bool PasswordMatch = true;
+            // For account creation this method isn't typically used, but keep
+            // a simple existence check for the password value.
+            bool exists = false;
             if (!txtPassword.Text.IsWhiteSpace())
             {
-                using (SqlConnection conn = new SqlConnection(getConnectionString()))
+                using (var ctx = new SequenceGameContext())
                 {
-                    conn.Open();
-                    string PasswordQuery = $"""
-                        SELECT PasswordHash 
-                        FROM PlayerData 
-                        WHERE PasswordHash = '{txtPassword.Text}'
-                        """;
-                    SqlCommand PasswordCmd = new SqlCommand(PasswordQuery, conn);
-                    SqlDataReader PasswordReader = PasswordCmd.ExecuteReader();
-
-                    while (PasswordReader.Read())
-                    {
-                        if (PasswordReader["Password"].ToString() == txtPassword.Text)
-                        {
-                            PasswordMatch = false;
-                            txtPassword.BackColor = Color.LightGreen;
-                            break;
-                        }
-                        else
-                        {
-                            txtPassword.BackColor = Color.DarkRed;
-                            break;
-                        }
-                    }
+                    exists = ctx.PlayerData.Any(p => p.PasswordHash == txtPassword.Text);
                 }
+                txtPassword.BackColor = exists ? Color.DarkRed : Color.LightGreen;
             }
-            return PasswordMatch;
+            return exists;
         }
 
         /// <summary>
@@ -162,58 +122,18 @@ namespace Final_Project___Sequence_Game
         /// Email for an account, but returns false if it doesn't match</returns>
         public bool CheckEmail()
         {
-            bool EmailMatch = true;
+            bool exists = false;
             if (!txtEmail.Text.IsWhiteSpace())
             {
-                using (SqlConnection conn = GetSqlConnection())
+                using (var ctx = new SequenceGameContext())
                 {
-                    conn.Open();
-                    string EmailQuery = $"""
-                        SELECT PlayerEmail 
-                        FROM PlayerData 
-                        WHERE PlayerEmail = '{txtEmail.Text}'
-                        """;
-                    SqlCommand EmailCmd = new SqlCommand(EmailQuery, conn);
-                    SqlDataReader EmailReader = EmailCmd.ExecuteReader();
-
-                    while (EmailReader.Read())
-                    {
-                        if (EmailReader["PlayerEmail"].ToString() == txtEmail.Text)
-                        {
-                            EmailMatch = false;
-                            txtEmail.BackColor = Color.LightGreen;
-                            break;
-                        }
-                        else
-                        {
-                            txtEmail.BackColor = Color.DarkRed;
-                            break;
-                        }
-                    }
+                    exists = ctx.PlayerData.Any(p => p.PlayerEmail == txtEmail.Text);
                 }
+                txtEmail.BackColor = exists ? Color.DarkRed : Color.LightGreen;
             }
-            return EmailMatch;
+            return exists;
         }
-
-        public SqlConnection GetSqlConnection()
-        {
-            string connectionString = getConnectionString();
-            return new SqlConnection(connectionString);
-        }
-
-        public string getConnectionString()
-        {
-            return """
-            Data Source=(localdb)\\MSSQLLocalDB;
-            Initial Catalog=SequenceGameDB;
-            Integrated Security=True;
-            Connect Timeout=30;
-            Encrypt=True;
-            Trust Server Certificate=True;
-            Application Intent=ReadWrite;M
-            ulti Subnet Failover=False;
-            Command Timeout=30
-            """;
-        }
+        // Connection string and ADO helpers removed — EF Core is used via
+        // SequenceGameContext and DbConfig.GetConnectionString().
     }
 }
