@@ -1,14 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Final_Project___Sequence_Game.Data;
+﻿using Final_Project___Sequence_Game.Data;
 using Final_Project___Sequence_Game.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Final_Project___Sequence_Game
 {
@@ -26,52 +17,30 @@ namespace Final_Project___Sequence_Game
         /// </summary>
         private void btnCreateAccount_Click(object sender, EventArgs e)
         {
-            if (!txtUsername.Text.IsWhiteSpace())
-            {
-                if (!txtPassword.Text.IsWhiteSpace())
+             bool usernameExists = CheckUsername();
+             bool emailExists = CheckEmail();
+             if (!usernameExists && !emailExists)
+             {
+                using (var ctx = new SequenceGameContext())
                 {
-                    if (!txtEmail.Text.IsWhiteSpace())
+                    var player = new PlayerData
                     {
-                        bool usernameExists = CheckUsername();
-                        bool emailExists = CheckEmail();
-                        if (!usernameExists && !emailExists)
-                        {
-                            using (var ctx = new SequenceGameContext())
-                            {
-                                var player = new PlayerData
-                                {
-                                    Username = txtUsername.Text,
-                                    PasswordHash = txtPassword.Text,
-                                    PlayerEmail = txtEmail.Text
-                                };
-                                ctx.PlayerData.Add(player);
-                                ctx.SaveChanges();
-                            }
-                            MessageBox.Show("Account created successfully!");
-                            this.Hide();
-                            SignIn signInForm = new SignIn();
-                            signInForm.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("One or more of the entered details already exist. Please try again with different details.");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please enter an email.");
-                    }
+                        Username = txtUsername.Text,
+                        PasswordHash = txtPassword.Text,
+                        PlayerEmail = txtEmail.Text
+                    };
+                    ctx.PlayerData.Add(player);
+                    ctx.SaveChanges();
                 }
-                else
-                {
-                    MessageBox.Show("Please enter a password.");
-                }
-
-            }
-            else
-            {
-                MessageBox.Show("Please enter a username.");
-            }
+                MessageBox.Show("Account created successfully!");
+                this.Hide();
+                SignIn signInForm = new SignIn();
+                signInForm.Show();
+             }
+             else
+             {
+                MessageBox.Show("Username or Email is already in use.");
+             }
         }
 
         /// <summary>
@@ -90,6 +59,10 @@ namespace Final_Project___Sequence_Game
                     exists = ctx.PlayerData.Any(p => p.Username == txtUsername.Text);
                 }
                 txtUsername.BackColor = exists ? Color.DarkRed : Color.LightGreen;
+            }
+            else
+            {
+                MessageBox.Show("Please enter a username.");
             }
             return exists;
         }
@@ -111,6 +84,10 @@ namespace Final_Project___Sequence_Game
                 }
                 txtPassword.BackColor = exists ? Color.DarkRed : Color.LightGreen;
             }
+            else
+            {
+                MessageBox.Show("Please enter a password.");
+            }
             return exists;
         }
 
@@ -130,6 +107,10 @@ namespace Final_Project___Sequence_Game
                     exists = ctx.PlayerData.Any(p => p.PlayerEmail == txtEmail.Text);
                 }
                 txtEmail.BackColor = exists ? Color.DarkRed : Color.LightGreen;
+            }
+            else
+            {
+                MessageBox.Show("Please enter an email.");
             }
             return exists;
         }

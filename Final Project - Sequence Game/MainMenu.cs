@@ -5,7 +5,7 @@ using Final_Project___Sequence_Game.Data;
 
 namespace Final_Project___Sequence_Game;
 
-
+// TODO: Add documentation to this class and its methods.
 public partial class MainMenu : Form
 {
 
