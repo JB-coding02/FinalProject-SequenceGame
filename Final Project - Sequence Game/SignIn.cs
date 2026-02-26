@@ -1,14 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Final_Project___Sequence_Game.Data;
-using Final_Project___Sequence_Game.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Final_Project___Sequence_Game.Data;
 
 namespace Final_Project___Sequence_Game;
 
@@ -30,7 +20,7 @@ public partial class SignIn : Form
         bool exists = false;
         if (!txtUsername.Text.IsWhiteSpace())
         {
-            using var ctx = new SequenceGameContext();
+            using var ctx = new SequenceGameDbContext();
             exists = ctx.PlayerData.Any(p => p.Username == txtUsername.Text);
             txtUsername.BackColor = exists ? Color.LightGreen : Color.DarkRed;
         }
@@ -46,7 +36,7 @@ public partial class SignIn : Form
         bool match = false;
         if (!txtPassword.Text.IsWhiteSpace() && !txtUsername.Text.IsWhiteSpace())
         {
-            using var ctx = new SequenceGameContext();
+            using var ctx = new SequenceGameDbContext();
             match = ctx.PlayerData.Any(p => p.Username == txtUsername.Text && p.PasswordHash == txtPassword.Text);
             txtPassword.BackColor = match ? Color.LightGreen : Color.DarkRed;
         }
@@ -64,7 +54,7 @@ public partial class SignIn : Form
         bool match = false;
         if (!txtEmail.Text.IsWhiteSpace() && !txtUsername.Text.IsWhiteSpace())
         {
-            using var ctx = new SequenceGameContext();
+            using var ctx = new SequenceGameDbContext();
             match = ctx.PlayerData.Any(p => p.Username == txtUsername.Text && p.PlayerEmail == txtEmail.Text);
             txtEmail.BackColor = match ? Color.LightGreen : Color.DarkRed;
         }
