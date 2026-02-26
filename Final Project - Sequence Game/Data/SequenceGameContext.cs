@@ -11,7 +11,7 @@ namespace Final_Project___Sequence_Game.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(DbConfig.GetConnectionString());
+                optionsBuilder.UseSqlServer(GetConnectionString());
             }
         }
 
@@ -22,6 +22,12 @@ namespace Final_Project___Sequence_Game.Data
             modelBuilder.Entity<PlayerData>().Property(p => p.Username).HasMaxLength(200);
             modelBuilder.Entity<PlayerData>().Property(p => p.PlayerEmail).HasMaxLength(200);
             modelBuilder.Entity<PlayerData>().Property(p => p.PasswordHash).HasMaxLength(500);
+        }
+
+        public static string GetConnectionString()
+        {
+            // single-line connection string for EF
+            return "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SequenceGameDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Command Timeout=30";
         }
     }
 }
