@@ -30,38 +30,51 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameBoard));
             picZoomedInBoard = new PictureBox();
+            glowRectangleControl2 = new GlowRectangleControl();
             ((System.ComponentModel.ISupportInitialize)picZoomedInBoard).BeginInit();
             SuspendLayout();
             // 
             // picZoomedInBoard
             // 
-            picZoomedInBoard.BackColor = Color.Transparent;
+            picZoomedInBoard.BackColor = Color.White;
             picZoomedInBoard.Image = Properties.Resources.EnlargedGameBoard;
-            picZoomedInBoard.Location = new Point(8, 7);
-            picZoomedInBoard.Margin = new Padding(2, 2, 2, 2);
+            picZoomedInBoard.Location = new Point(12, 12);
             picZoomedInBoard.Name = "picZoomedInBoard";
-            picZoomedInBoard.Size = new Size(1114, 900);
-            picZoomedInBoard.SizeMode = PictureBoxSizeMode.AutoSize;
+            picZoomedInBoard.Size = new Size(1370, 1000);
+            picZoomedInBoard.SizeMode = PictureBoxSizeMode.StretchImage;
             picZoomedInBoard.TabIndex = 2;
             picZoomedInBoard.TabStop = false;
             // 
+            // glowRectangleControl2
+            // 
+            glowRectangleControl2.BackColor = Color.Transparent;
+            glowRectangleControl2.ForeColor = Color.Transparent;
+            glowRectangleControl2.GlowOpacity = 255;
+            glowRectangleControl2.Location = new Point(1227, 101);
+            glowRectangleControl2.Name = "glowRectangleControl2";
+            glowRectangleControl2.Size = new Size(136, 97);
+            glowRectangleControl2.TabIndex = 3;
+            glowRectangleControl2.MouseEnter += new EventHandler(glowRectangleControl2_OnHoverEnter);
+            glowRectangleControl2.MouseLeave += new EventHandler(glowRectangleControl2_OnHoverLeave);
+            // 
             // GameBoard
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             BackColor = Color.FromArgb(192, 192, 0);
-            ClientSize = new Size(1177, 924);
+            ClientSize = new Size(1860, 1186);
+            Controls.Add(glowRectangleControl2);
             Controls.Add(picZoomedInBoard);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(2, 2, 2, 2);
             Name = "GameBoard";
             Text = "Game Board";
             ((System.ComponentModel.ISupportInitialize)picZoomedInBoard).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
         private PictureBox picZoomedInBoard;
+        private GlowRectangleControl glowRectangleControl2;
     }
 }
