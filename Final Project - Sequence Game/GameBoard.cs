@@ -7,6 +7,32 @@ public partial class GameBoard : Form
     public GameBoard(string? PlayerUsername)
     {
         InitializeComponent();
+        InitializeGlowEffect();
+    }
+
+    private void InitializeGlowEffect()
+    {
+        foreach (Control control in Controls)
+        {
+            if (control is GlowRectangleControl glowControl)
+            {
+                glowControl.GlowOpacity = 0; // Start with no glow
+                glowControl.Refresh(); // Ensure the control is properly initialized
+                glowControl.MouseEnter += glowRectangleControl2_OnHoverEnter;
+                glowControl.MouseLeave += glowRectangleControl2_OnHoverLeave;
+            }
+        }
+        glowRectangleControl2.GlowOpacity = 0; // Start with no glow
+    }
+
+    private void glowRectangleControl2_OnHoverEnter(object sender, EventArgs e)
+    {
+        glowRectangleControl2.GlowOpacity = 255;
+    }
+
+    private void glowRectangleControl2_OnHoverLeave(object sender, EventArgs e)
+    {
+        glowRectangleControl2.GlowOpacity = 0;
     }
 
     public string[,] CreateGrid()

@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
+﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
 
 namespace Final_Project___Sequence_Game;
 
 public class GlowRectangleControl : Control
 {
-    #region Control Setup
+    #region Control Settings
     #region Designer Properties
     // ============================================================
     //  BACK-END STATE (all variables and properties in one place)
@@ -22,10 +19,10 @@ public class GlowRectangleControl : Control
     public Rectangle GlowArea { get; set; }
 
     // Glow opacity (0–255)
-    private int glowOpacity = 180;
+    private int glowOpacity = 255;
     [Description("Opacity of the outer glow (0-255).")]
     [Browsable(true)]
-    [DefaultValue(180)]
+    [DefaultValue(255)]
     public int GlowOpacity
     {
         get => glowOpacity;
@@ -160,6 +157,34 @@ public class GlowRectangleControl : Control
             Rectangle inner = Rectangle.Inflate(GlowArea, -glowThickness / 2, -glowThickness / 2);
             e.Graphics.DrawRectangle(innerPen, inner);
         }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public override string Text
+    {
+        get => base.Text;
+        set
+        {
+            base.Text = value;
+        }
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Font Font
+    {
+        get => base.Font;
+        set => base.Font = value;
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Color ForeColor
+    {
+        get => base.ForeColor;
+        set => base.ForeColor = value;
     }
     #endregion
     #endregion

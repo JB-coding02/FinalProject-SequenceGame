@@ -48,11 +48,14 @@
             // glowRectangleControl2
             // 
             glowRectangleControl2.BackColor = Color.Transparent;
-            glowRectangleControl2.Location = new Point(1228, 104);
+            glowRectangleControl2.ForeColor = Color.Transparent;
+            glowRectangleControl2.GlowOpacity = 255;
+            glowRectangleControl2.Location = new Point(1227, 101);
             glowRectangleControl2.Name = "glowRectangleControl2";
             glowRectangleControl2.Size = new Size(136, 97);
             glowRectangleControl2.TabIndex = 3;
-            glowRectangleControl2.Text = "glowRectangleControl2";
+            glowRectangleControl2.MouseEnter += new EventHandler(glowRectangleControl2_OnHoverEnter);
+            glowRectangleControl2.MouseLeave += new EventHandler(glowRectangleControl2_OnHoverLeave);
             // 
             // GameBoard
             // 
@@ -60,7 +63,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             BackColor = Color.FromArgb(192, 192, 0);
-            ClientSize = new Size(2205, 1186);
+            ClientSize = new Size(1860, 1186);
             Controls.Add(glowRectangleControl2);
             Controls.Add(picZoomedInBoard);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -72,11 +75,6 @@
 
         #endregion
         private PictureBox picZoomedInBoard;
-        private GlowRectangleControl glowRectangleControl1;
-        private GlowRectangleControl GlwRecFreeTL;
-        private GlowRectangleControl GlwRecFreeBR;
-        private GlowRectangleControl GlwRecFreeBL;
-        private GlowRectangleControl GlwRecFreeTR;
         private GlowRectangleControl glowRectangleControl2;
     }
 }
