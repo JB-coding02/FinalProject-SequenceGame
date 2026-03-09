@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameBoard));
             picZoomedInBoard = new PictureBox();
             glowRectangleControl2 = new GlowRectangleControl();
+            glowRectangleControl1 = new GlowRectangleControl();
             ((System.ComponentModel.ISupportInitialize)picZoomedInBoard).BeginInit();
             SuspendLayout();
             // 
@@ -49,11 +50,18 @@
             // 
             glowRectangleControl2.BackColor = Color.Transparent;
             glowRectangleControl2.ForeColor = Color.Transparent;
-            glowRectangleControl2.GlowOpacity = 255;
             glowRectangleControl2.Location = new Point(1227, 101);
             glowRectangleControl2.Name = "glowRectangleControl2";
             glowRectangleControl2.Size = new Size(136, 97);
             glowRectangleControl2.TabIndex = 3;
+            // 
+            // glowRectangleControl1
+            // 
+            glowRectangleControl1.BackColor = Color.Transparent;
+            glowRectangleControl1.Location = new Point(30, 101);
+            glowRectangleControl1.Name = "glowRectangleControl1";
+            glowRectangleControl1.Size = new Size(136, 97);
+            glowRectangleControl1.TabIndex = 4;
             // 
             // GameBoard
             // 
@@ -62,6 +70,7 @@
             AutoSize = true;
             BackColor = Color.FromArgb(192, 192, 0);
             ClientSize = new Size(1860, 1186);
+            Controls.Add(glowRectangleControl1);
             Controls.Add(glowRectangleControl2);
             Controls.Add(picZoomedInBoard);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -74,5 +83,6 @@
         #endregion
         private PictureBox picZoomedInBoard;
         private GlowRectangleControl glowRectangleControl2;
+        private GlowRectangleControl glowRectangleControl1;
     }
 }

@@ -87,6 +87,7 @@ public class GlowRectangleControl : Control
     private Bitmap? cachedBackground = null;
     private bool backgroundCacheValid = false;
     private bool isCapturingBackground = false;
+    private Point backgroundOffset = Point.Empty;
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Rectangle GlowArea { get; set; }
@@ -157,18 +158,35 @@ public class GlowRectangleControl : Control
         base.OnMouseLeave(e);
     }
 
+    protected override void OnGotFocus(EventArgs e)
+    {
+        Invalidate();
+        base.OnGotFocus(e);
+    }
+
+    protected override void OnLostFocus(EventArgs e)
+    {
+        Invalidate();
+        base.OnLostFocus(e);
+    }
+
     // TEMPORARY: Debug positioning with mouse drag
     protected override void OnMouseDown(MouseEventArgs e)
     {
         base.OnMouseDown(e);
 
-        if (debugMode && e.Button == MouseButtons.Left)
+        if (e.Button == MouseButtons.Left)
         {
-            isDragging = true;
-            dragStartPoint = e.Location;
-            originalLocation = this.Location;
-            this.Cursor = Cursors.SizeAll;
+            // Always allow focus when clicked
             this.Focus();
+
+            if (debugMode)
+            {
+                isDragging = true;
+                dragStartPoint = e.Location;
+                originalLocation = this.Location;
+                this.Cursor = Cursors.SizeAll;
+            }
         }
     }
 
@@ -198,10 +216,35 @@ public class GlowRectangleControl : Control
 
             System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Final Location: X={this.Left}, Y={this.Top}");
             System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+            Console.WriteLine($"[GlowRectangle] Final Location: X={this.Left}, Y={this.Top}");
+            Console.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+        }
+        else if (isDragging)
+        {
+            isDragging = false;
+            this.Cursor = Cursors.Default;
         }
     }
 
-    // TEMPORARY: Debug positioning with keyboard
+    protected override bool IsInputKey(Keys keyData)
+    {
+        // Tell Windows Forms that this control wants to handle arrow keys
+        switch (keyData)
+        {
+            case Keys.Left:
+            case Keys.Right:
+            case Keys.Up:
+            case Keys.Down:
+            case Keys.Shift | Keys.Left:
+            case Keys.Shift | Keys.Right:
+            case Keys.Shift | Keys.Up:
+            case Keys.Shift | Keys.Down:
+                return true;
+        }
+        return base.IsInputKey(keyData);
+    }
+
+    // TEMPORARY: Debug positioning with keyboard (adjusts background offset)
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
@@ -210,37 +253,39 @@ public class GlowRectangleControl : Control
 
         int step = e.Shift ? 10 : 1;
         bool moved = false;
-        Point newLocation = this.Location;
 
         switch (e.KeyCode)
         {
             case Keys.Left:
-                newLocation.X -= step;
+                backgroundOffset.X -= step;
                 moved = true;
                 break;
             case Keys.Right:
-                newLocation.X += step;
+                backgroundOffset.X += step;
                 moved = true;
                 break;
             case Keys.Up:
-                newLocation.Y -= step;
+                backgroundOffset.Y -= step;
                 moved = true;
                 break;
             case Keys.Down:
-                newLocation.Y += step;
+                backgroundOffset.Y += step;
                 moved = true;
                 break;
             case Keys.R:
-                System.Diagnostics.Debug.WriteLine("[GlowRectangle] Current Position Reset Command - current position will be new default");
-                System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+                System.Diagnostics.Debug.WriteLine("[GlowRectangle] Current Background Offset - use this for fine-tuning");
+                System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
+                Console.WriteLine("[GlowRectangle] Current Background Offset - use this for fine-tuning");
+                Console.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
                 e.Handled = true;
                 return;
         }
 
         if (moved)
         {
-            this.Location = newLocation;
-            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Location: X={this.Left}, Y={this.Top}");
+            Invalidate();
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
+            Console.WriteLine($"[GlowRectangle] Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
             e.Handled = true;
         }
     }
@@ -251,12 +296,14 @@ public class GlowRectangleControl : Control
 
         if (!debugMode) return;
 
-        // Output final position when key is released
+        // Output final background offset when key is released
         if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right || 
             e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
         {
-            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Final Location: X={this.Left}, Y={this.Top}");
-            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Final Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
+            Console.WriteLine($"[GlowRectangle] Final Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
+            Console.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
         }
     }
     #endregion
@@ -281,7 +328,7 @@ public class GlowRectangleControl : Control
             {
                 cachedBackground?.Dispose();
                 cachedBackground = new Bitmap(Parent.Width, Parent.Height);
-                
+
                 isCapturingBackground = true;
                 try
                 {
@@ -297,7 +344,7 @@ public class GlowRectangleControl : Control
             var graphics = pevent.Graphics;
             graphics.DrawImage(cachedBackground, 
                              new Rectangle(0, 0, Width, Height),
-                             new Rectangle(Left, Top, Width, Height), 
+                             new Rectangle(Left + backgroundOffset.X, Top + backgroundOffset.Y, Width, Height), 
                              GraphicsUnit.Pixel);
         }
         else
@@ -320,22 +367,31 @@ public class GlowRectangleControl : Control
     {
         base.OnPaint(e);
 
-        if (!isHovered)
-            return;
-
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Outer glow
-        using (var glowPen = new Pen(Color.FromArgb(glowOpacity, glowColor), glowThickness))
+        if (isHovered)
         {
-            e.Graphics.DrawRectangle(glowPen, GlowArea);
-        }
+            // Outer glow
+            using (var glowPen = new Pen(Color.FromArgb(glowOpacity, glowColor), glowThickness))
+            {
+                e.Graphics.DrawRectangle(glowPen, GlowArea);
+            }
 
-        // Inner highlight
-        using (var innerPen = new Pen(Color.FromArgb(glowOpacity / 2, glowColor), innerThickness))
+            // Inner highlight
+            using (var innerPen = new Pen(Color.FromArgb(glowOpacity / 2, glowColor), innerThickness))
+            {
+                Rectangle inner = Rectangle.Inflate(GlowArea, -glowThickness / 2, -glowThickness / 2);
+                e.Graphics.DrawRectangle(innerPen, inner);
+            }
+        }
+        else if (this.Focused && debugMode)
         {
-            Rectangle inner = Rectangle.Inflate(GlowArea, -glowThickness / 2, -glowThickness / 2);
-            e.Graphics.DrawRectangle(innerPen, inner);
+            // Show a subtle border when focused (but not hovered) in debug mode
+            using (var focusPen = new Pen(Color.FromArgb(128, Color.Yellow), 2))
+            {
+                focusPen.DashStyle = DashStyle.Dash;
+                e.Graphics.DrawRectangle(focusPen, GlowArea);
+            }
         }
 
         // TEMPORARY: Show positioning help when focused
@@ -344,7 +400,9 @@ public class GlowRectangleControl : Control
             using (var helpBrush = new SolidBrush(Color.FromArgb(200, Color.White)))
             using (var font = new Font("Arial", 8))
             {
-                string help = isDragging ? "Dragging..." : "Arrows: Move (Shift=Fast) | R: Output Code | Drag: Move";
+                string help = isDragging 
+                    ? "Dragging Control..." 
+                    : $"Drag: Move Control | Arrows: Adjust Background ({backgroundOffset.X}, {backgroundOffset.Y}) | R: Output";
                 e.Graphics.DrawString(help, font, helpBrush, 5, 5);
             }
         }
