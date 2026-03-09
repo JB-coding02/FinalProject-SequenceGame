@@ -22,17 +22,6 @@ public partial class MainMenu : Form
         txtUsername.Text = Username;
     }
 
-    public void getConnection()
-    {
-        string connString = SequenceGameDbContext.GetConnectionString();
-    }
-
-
-    public string getConnectionString()
-    {
-        return SequenceGameDbContext.GetConnectionString();
-    }
-
     private void BtnPlay_Click(object sender, EventArgs e)
     {
         GameBoard gameBoard = new GameBoard(txtUsername.Text);

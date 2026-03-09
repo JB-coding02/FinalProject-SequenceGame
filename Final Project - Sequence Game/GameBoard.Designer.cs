@@ -54,8 +54,6 @@
             glowRectangleControl2.Name = "glowRectangleControl2";
             glowRectangleControl2.Size = new Size(136, 97);
             glowRectangleControl2.TabIndex = 3;
-            glowRectangleControl2.MouseEnter += new EventHandler(glowRectangleControl2_OnHoverEnter);
-            glowRectangleControl2.MouseLeave += new EventHandler(glowRectangleControl2_OnHoverLeave);
             // 
             // GameBoard
             // 

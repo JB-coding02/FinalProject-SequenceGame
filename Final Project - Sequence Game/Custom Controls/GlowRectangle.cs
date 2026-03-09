@@ -5,18 +5,11 @@ namespace Final_Project___Sequence_Game;
 
 public class GlowRectangleControl : Control
 {
-    #region Control Settings
-    #region Designer Properties
+    #region Customize
     // ============================================================
-    //  BACK-END STATE (all variables and properties in one place)
+    //  CUSTOMIZABLE PROPERTIES & SETTINGS
+    //  Adjust these values to fine-tune the glow effect
     // ============================================================
-
-    // Hover state
-    private bool isHovered = false;
-
-    // Glow area (hidden from designer serialization)
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Rectangle GlowArea { get; set; }
 
     // Glow opacity (0–255)
     private int glowOpacity = 255;
@@ -77,11 +70,31 @@ public class GlowRectangleControl : Control
             Invalidate();
         }
     }
+
+    // TEMPORARY: Debug positioning controls
+    private bool debugMode = true; // Set to false to disable debug positioning
     #endregion
 
-    #region Core Logic
+    #region Internal State
     // ============================================================
-    //  CONSTRUCTOR
+    //  INTERNAL STATE (not for customization)
+    // ============================================================
+
+    private bool isHovered = false;
+    private bool isDragging = false;
+    private Point dragStartPoint;
+    private Point originalLocation;
+    private Bitmap? cachedBackground = null;
+    private bool backgroundCacheValid = false;
+    private bool isCapturingBackground = false;
+
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public Rectangle GlowArea { get; set; }
+    #endregion
+
+    #region Initialization
+    // ============================================================
+    //  CONSTRUCTOR & SETUP
     // ============================================================
 
     public GlowRectangleControl()
@@ -90,25 +103,44 @@ public class GlowRectangleControl : Control
                  ControlStyles.OptimizedDoubleBuffer |
                  ControlStyles.UserPaint |
                  ControlStyles.ResizeRedraw |
-                 ControlStyles.SupportsTransparentBackColor, true);
+                 ControlStyles.SupportsTransparentBackColor |
+                 ControlStyles.Selectable, true);
 
         BackColor = Color.Transparent;
-
         GlowArea = new Rectangle(0, 0, Width - 1, Height - 1);
-    }
 
-    // ============================================================
-    //  LAYOUT / RESIZE
-    // ============================================================
+        // TEMPORARY: Enable keyboard input for positioning
+        this.TabStop = true;
+    }
 
     protected override void OnResize(EventArgs e)
     {
         GlowArea = new Rectangle(0, 0, Width - 1, Height - 1);
+        InvalidateBackgroundCache();
         base.OnResize(e);
     }
 
+    protected override void OnLocationChanged(EventArgs e)
+    {
+        InvalidateBackgroundCache();
+        base.OnLocationChanged(e);
+    }
+
+    protected override void OnParentChanged(EventArgs e)
+    {
+        InvalidateBackgroundCache();
+        base.OnParentChanged(e);
+    }
+
+    private void InvalidateBackgroundCache()
+    {
+        backgroundCacheValid = false;
+    }
+    #endregion
+
+    #region Event Handlers
     // ============================================================
-    //  HOVER LOGIC
+    //  USER INTERACTION EVENTS
     // ============================================================
 
     protected override void OnMouseEnter(EventArgs e)
@@ -124,16 +156,164 @@ public class GlowRectangleControl : Control
         Invalidate();
         base.OnMouseLeave(e);
     }
+
+    // TEMPORARY: Debug positioning with mouse drag
+    protected override void OnMouseDown(MouseEventArgs e)
+    {
+        base.OnMouseDown(e);
+
+        if (debugMode && e.Button == MouseButtons.Left)
+        {
+            isDragging = true;
+            dragStartPoint = e.Location;
+            originalLocation = this.Location;
+            this.Cursor = Cursors.SizeAll;
+            this.Focus();
+        }
+    }
+
+    protected override void OnMouseMove(MouseEventArgs e)
+    {
+        base.OnMouseMove(e);
+
+        if (debugMode && isDragging)
+        {
+            int deltaX = e.X - dragStartPoint.X;
+            int deltaY = e.Y - dragStartPoint.Y;
+
+            this.Location = new Point(originalLocation.X + deltaX, originalLocation.Y + deltaY);
+
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Dragging: X={this.Left}, Y={this.Top}");
+        }
+    }
+
+    protected override void OnMouseUp(MouseEventArgs e)
+    {
+        base.OnMouseUp(e);
+
+        if (debugMode && isDragging)
+        {
+            isDragging = false;
+            this.Cursor = Cursors.Default;
+
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Final Location: X={this.Left}, Y={this.Top}");
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+        }
+    }
+
+    // TEMPORARY: Debug positioning with keyboard
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        base.OnKeyDown(e);
+
+        if (!debugMode) return;
+
+        int step = e.Shift ? 10 : 1;
+        bool moved = false;
+        Point newLocation = this.Location;
+
+        switch (e.KeyCode)
+        {
+            case Keys.Left:
+                newLocation.X -= step;
+                moved = true;
+                break;
+            case Keys.Right:
+                newLocation.X += step;
+                moved = true;
+                break;
+            case Keys.Up:
+                newLocation.Y -= step;
+                moved = true;
+                break;
+            case Keys.Down:
+                newLocation.Y += step;
+                moved = true;
+                break;
+            case Keys.R:
+                System.Diagnostics.Debug.WriteLine("[GlowRectangle] Current Position Reset Command - current position will be new default");
+                System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+                e.Handled = true;
+                return;
+        }
+
+        if (moved)
+        {
+            this.Location = newLocation;
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Location: X={this.Left}, Y={this.Top}");
+            e.Handled = true;
+        }
+    }
+
+    protected override void OnKeyUp(KeyEventArgs e)
+    {
+        base.OnKeyUp(e);
+
+        if (!debugMode) return;
+
+        // Output final position when key is released
+        if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right || 
+            e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+        {
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Final Location: X={this.Left}, Y={this.Top}");
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+        }
+    }
     #endregion
 
-    #region Public Methods
+    #region Painting
     // ============================================================
-    //  PAINTING
+    //  RENDERING LOGIC
     // ============================================================
 
     protected override void OnPaintBackground(PaintEventArgs pevent)
     {
-        // Transparent center — do not paint background
+        if (isCapturingBackground)
+        {
+            // Don't try to capture background while already capturing
+            base.OnPaintBackground(pevent);
+            return;
+        }
+
+        if (Parent != null && BackColor == Color.Transparent)
+        {
+            if (!backgroundCacheValid || cachedBackground == null)
+            {
+                cachedBackground?.Dispose();
+                cachedBackground = new Bitmap(Parent.Width, Parent.Height);
+                
+                isCapturingBackground = true;
+                try
+                {
+                    Parent.DrawToBitmap(cachedBackground, new Rectangle(0, 0, Parent.Width, Parent.Height));
+                    backgroundCacheValid = true;
+                }
+                finally
+                {
+                    isCapturingBackground = false;
+                }
+            }
+
+            var graphics = pevent.Graphics;
+            graphics.DrawImage(cachedBackground, 
+                             new Rectangle(0, 0, Width, Height),
+                             new Rectangle(Left, Top, Width, Height), 
+                             GraphicsUnit.Pixel);
+        }
+        else
+        {
+            base.OnPaintBackground(pevent);
+        }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            cachedBackground?.Dispose();
+            cachedBackground = null;
+        }
+        base.Dispose(disposing);
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -157,7 +337,24 @@ public class GlowRectangleControl : Control
             Rectangle inner = Rectangle.Inflate(GlowArea, -glowThickness / 2, -glowThickness / 2);
             e.Graphics.DrawRectangle(innerPen, inner);
         }
+
+        // TEMPORARY: Show positioning help when focused
+        if (debugMode && this.Focused)
+        {
+            using (var helpBrush = new SolidBrush(Color.FromArgb(200, Color.White)))
+            using (var font = new Font("Arial", 8))
+            {
+                string help = isDragging ? "Dragging..." : "Arrows: Move (Shift=Fast) | R: Output Code | Drag: Move";
+                e.Graphics.DrawString(help, font, helpBrush, 5, 5);
+            }
+        }
     }
+    #endregion
+
+    #region Hidden Properties
+    // ============================================================
+    //  HIDE INHERITED PROPERTIES FROM DESIGNER
+    // ============================================================
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -165,10 +362,7 @@ public class GlowRectangleControl : Control
     public override string Text
     {
         get => base.Text;
-        set
-        {
-            base.Text = value;
-        }
+        set => base.Text = value;
     }
 
     [Browsable(false)]
@@ -186,6 +380,5 @@ public class GlowRectangleControl : Control
         get => base.ForeColor;
         set => base.ForeColor = value;
     }
-    #endregion
     #endregion
 }

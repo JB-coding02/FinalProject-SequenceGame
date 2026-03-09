@@ -17,11 +17,17 @@ public partial class CreateAccount : Form
     /// </summary>
     private void btnCreateAccount_Click(object sender, EventArgs e)
     {
-         bool usernameExists = CheckUsername();
-         bool emailExists = CheckEmail();
-         if (!usernameExists && !emailExists)
-         {
-            using (var ctx = new SequenceGameDbContext())
+        if (txtUsername.Text.IsWhiteSpace() || txtPassword.Text.IsWhiteSpace() || txtEmail.Text.IsWhiteSpace())
+        {
+            MessageBox.Show("Please fill in all fields.");
+            return;
+        }
+
+        using (var ctx = new SequenceGameDbContext())
+        {
+            bool exists = ctx.PlayerData.Any(p => p.Username == txtUsername.Text || p.PlayerEmail == txtEmail.Text);
+
+            if (!exists)
             {
                 var player = new PlayerData
                 {
@@ -31,16 +37,17 @@ public partial class CreateAccount : Form
                 };
                 ctx.PlayerData.Add(player);
                 ctx.SaveChanges();
+
+                MessageBox.Show("Account created successfully!");
+                this.Hide();
+                SignIn signInForm = new SignIn();
+                signInForm.Show();
             }
-            MessageBox.Show("Account created successfully!");
-            this.Hide();
-            SignIn signInForm = new SignIn();
-            signInForm.Show();
-         }
-         else
-         {
-            MessageBox.Show("Username or Email is already in use.");
-         }
+            else
+            {
+                MessageBox.Show("Username or Email is already in use.");
+            }
+        }
     }
 
     /// <summary>
@@ -51,20 +58,18 @@ public partial class CreateAccount : Form
     /// Username for an account, but returns false if it doesn't match</returns>
     public bool CheckUsername()
     {
-        bool exists = false;
-        if (!txtUsername.Text.IsWhiteSpace())
-        {
-            using (var ctx = new SequenceGameDbContext())
-            {
-                exists = ctx.PlayerData.Any(p => p.Username == txtUsername.Text);
-            }
-            txtUsername.BackColor = exists ? Color.DarkRed : Color.LightGreen;
-        }
-        else
+        if (txtUsername.Text.IsWhiteSpace())
         {
             MessageBox.Show("Please enter a username.");
+            return false;
         }
-        return exists;
+
+        using (var ctx = new SequenceGameDbContext())
+        {
+            bool exists = ctx.PlayerData.Any(p => p.Username == txtUsername.Text);
+            txtUsername.BackColor = exists ? Color.DarkRed : Color.LightGreen;
+            return exists;
+        }
     }
     /// <summary>
     /// Checks if the entered password matches one in the database.
@@ -73,22 +78,18 @@ public partial class CreateAccount : Form
     /// password for an account, but returns false if it doesn't match</returns>
     public bool CheckPassword()
     {
-        // For account creation this method isn't typically used, but keep
-        // a simple existence check for the password value.
-        bool exists = false;
-        if (!txtPassword.Text.IsWhiteSpace())
-        {
-            using (var ctx = new SequenceGameDbContext())
-            {
-                exists = ctx.PlayerData.Any(p => p.PasswordHash == txtPassword.Text);
-            }
-            txtPassword.BackColor = exists ? Color.DarkRed : Color.LightGreen;
-        }
-        else
+        if (txtPassword.Text.IsWhiteSpace())
         {
             MessageBox.Show("Please enter a password.");
+            return false;
         }
-        return exists;
+
+        using (var ctx = new SequenceGameDbContext())
+        {
+            bool exists = ctx.PlayerData.Any(p => p.PasswordHash == txtPassword.Text);
+            txtPassword.BackColor = exists ? Color.DarkRed : Color.LightGreen;
+            return exists;
+        }
     }
 
     /// <summary>
@@ -99,20 +100,18 @@ public partial class CreateAccount : Form
     /// Email for an account, but returns false if it doesn't match</returns>
     public bool CheckEmail()
     {
-        bool exists = false;
-        if (!txtEmail.Text.IsWhiteSpace())
-        {
-            using (var ctx = new SequenceGameDbContext())
-            {
-                exists = ctx.PlayerData.Any(p => p.PlayerEmail == txtEmail.Text);
-            }
-            txtEmail.BackColor = exists ? Color.DarkRed : Color.LightGreen;
-        }
-        else
+        if (txtEmail.Text.IsWhiteSpace())
         {
             MessageBox.Show("Please enter an email.");
+            return false;
         }
-        return exists;
+
+        using (var ctx = new SequenceGameDbContext())
+        {
+            bool exists = ctx.PlayerData.Any(p => p.PlayerEmail == txtEmail.Text);
+            txtEmail.BackColor = exists ? Color.DarkRed : Color.LightGreen;
+            return exists;
+        }
     }
     // Connection string and ADO helpers removed — EF Core is used via
     // SequenceGameContext and DbConfig.GetConnectionString().
