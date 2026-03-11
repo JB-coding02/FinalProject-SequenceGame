@@ -24,13 +24,13 @@ public partial class MainMenu : Form
 
     public void getConnection()
     {
-        string connString = SequenceGameDbContext.GetConnectionString();
+        string connString = DbConfig.GetConnectionString();
     }
 
 
     public string getConnectionString()
     {
-        return SequenceGameDbContext.GetConnectionString();
+        return DbConfig.GetConnectionString();
     }
 
     private void BtnPlay_Click(object sender, EventArgs e)
