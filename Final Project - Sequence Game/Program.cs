@@ -3,7 +3,8 @@ namespace Final_Project___Sequence_Game;
 internal static class Program
 {
     /// <summary>
-    ///  The main entry point for the application.
+    /// The entry point for the Sequence Game application.
+    /// Initializes the Windows Forms application framework and launches the main menu form.
     /// </summary>
     [STAThread]
     static void Main()
