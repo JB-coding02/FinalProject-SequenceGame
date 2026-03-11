@@ -3,6 +3,10 @@ using System.Drawing.Drawing2D;
 
 namespace Final_Project___Sequence_Game;
 
+/// <summary>
+/// Custom control for rendering a rectangular glow effect.
+/// Provides smooth rendering with proper double-buffering and background caching.
+/// </summary>
 public class GlowRectangleControl : Control
 {
     #region Customize
@@ -11,7 +15,7 @@ public class GlowRectangleControl : Control
     //  Adjust these values to fine-tune the glow effect
     // ============================================================
 
-    // Glow opacity (0–255)
+    /// <summary>Gets or sets the glow opacity (0-255).</summary>
     private int glowOpacity = 255;
     [Description("Opacity of the outer glow (0-255).")]
     [Browsable(true)]
@@ -21,12 +25,15 @@ public class GlowRectangleControl : Control
         get => glowOpacity;
         set
         {
-            glowOpacity = Math.Max(0, Math.Min(255, value));
-            Invalidate();
+            if (glowOpacity != value)  // Only invalidate if actually changed
+            {
+                glowOpacity = Math.Max(0, Math.Min(255, value));
+                InvalidateWithBuffer();  // Invalidate parent too!
+            }
         }
     }
 
-    // Glow color
+    /// <summary>Gets or sets the glow color.</summary>
     private Color glowColor = Color.Cyan;
     [Description("Color of the outer glow.")]
     [Browsable(true)]
@@ -36,12 +43,15 @@ public class GlowRectangleControl : Control
         get => glowColor;
         set
         {
-            glowColor = value;
-            Invalidate();
+            if (glowColor != value)
+            {
+                glowColor = value;
+                InvalidateWithBuffer();
+            }
         }
     }
 
-    // Glow thickness
+    /// <summary>Gets or sets the glow thickness in pixels.</summary>
     private int glowThickness = 6;
     [Description("Thickness of the outer glow.")]
     [Browsable(true)]
@@ -51,12 +61,15 @@ public class GlowRectangleControl : Control
         get => glowThickness;
         set
         {
-            glowThickness = Math.Max(1, value);
-            Invalidate();
+            if (glowThickness != value)
+            {
+                glowThickness = Math.Max(1, value);
+                InvalidateWithBuffer();
+            }
         }
     }
 
-    // Inner highlight thickness
+    /// <summary>Gets or sets the inner highlight thickness in pixels.</summary>
     private int innerThickness = 2;
     [Description("Thickness of the inner highlight line.")]
     [Browsable(true)]
@@ -66,13 +79,16 @@ public class GlowRectangleControl : Control
         get => innerThickness;
         set
         {
-            innerThickness = Math.Max(1, value);
-            Invalidate();
+            if (innerThickness != value)
+            {
+                innerThickness = Math.Max(1, value);
+                InvalidateWithBuffer();
+            }
         }
     }
 
-    // TEMPORARY: Debug positioning controls
-    private bool debugMode = true; // Set to false to disable debug positioning
+    /// <summary>Debug mode: allows positioning with mouse/keyboard.</summary>
+    private bool debugMode = true;
     #endregion
 
     #region Internal State
@@ -84,6 +100,7 @@ public class GlowRectangleControl : Control
     private bool isDragging = false;
     private Point dragStartPoint;
     private Point originalLocation;
+    private Point previousLocation;
     private Bitmap? cachedBackground = null;
     private bool backgroundCacheValid = false;
     private bool isCapturingBackground = false;
@@ -98,10 +115,12 @@ public class GlowRectangleControl : Control
     //  CONSTRUCTOR & SETUP
     // ============================================================
 
+    /// <summary>Initializes a new instance of the GlowRectangleControl.</summary>
     public GlowRectangleControl()
     {
+        // Enable optimized rendering
         SetStyle(ControlStyles.AllPaintingInWmPaint |
-                 ControlStyles.OptimizedDoubleBuffer |
+                 ControlStyles.OptimizedDoubleBuffer |  // Critical for smooth rendering
                  ControlStyles.UserPaint |
                  ControlStyles.ResizeRedraw |
                  ControlStyles.SupportsTransparentBackColor |
@@ -109,11 +128,11 @@ public class GlowRectangleControl : Control
 
         BackColor = Color.Transparent;
         GlowArea = new Rectangle(0, 0, Width - 1, Height - 1);
-
-        // TEMPORARY: Enable keyboard input for positioning
+        previousLocation = Location;
         this.TabStop = true;
     }
 
+    /// <summary>Handles control resize events.</summary>
     protected override void OnResize(EventArgs e)
     {
         GlowArea = new Rectangle(0, 0, Width - 1, Height - 1);
@@ -121,21 +140,51 @@ public class GlowRectangleControl : Control
         base.OnResize(e);
     }
 
+    /// <summary>Handles location change events and invalidates affected areas.</summary>
     protected override void OnLocationChanged(EventArgs e)
     {
-        InvalidateBackgroundCache();
+        // Invalidate old position (with padding for glow)
+        int padding = glowThickness + 10;
+        var oldRect = new Rectangle(
+            previousLocation.X - padding,
+            previousLocation.Y - padding,
+            Width + (padding * 2),
+            Height + (padding * 2));
+        Parent.Invalidate(oldRect);  // Clear old trails!
+
+        // Invalidate new position
+        var newRect = new Rectangle(
+            Location.X - padding,
+            Location.Y - padding,
+            Width + (padding * 2),
+            Height + (padding * 2));
+        Parent.Invalidate(newRect);
+
+        previousLocation = Location;
         base.OnLocationChanged(e);
     }
 
+    /// <summary>Handles parent control changes.</summary>
     protected override void OnParentChanged(EventArgs e)
     {
         InvalidateBackgroundCache();
         base.OnParentChanged(e);
     }
 
+    /// <summary>Invalidates the cached background.</summary>
     private void InvalidateBackgroundCache()
     {
         backgroundCacheValid = false;
+    }
+
+    /// <summary>Invalidates this control and its buffer for smooth rendering.</summary>
+    private void InvalidateWithBuffer()
+    {
+        Invalidate();
+        if (Parent != null)
+        {
+            Parent.Invalidate();  // Clear parent too!
+        }
     }
     #endregion
 
@@ -144,40 +193,43 @@ public class GlowRectangleControl : Control
     //  USER INTERACTION EVENTS
     // ============================================================
 
+    /// <summary>Handles mouse enter event.</summary>
     protected override void OnMouseEnter(EventArgs e)
     {
         isHovered = true;
-        Invalidate();
+        InvalidateWithBuffer();
         base.OnMouseEnter(e);
     }
 
+    /// <summary>Handles mouse leave event.</summary>
     protected override void OnMouseLeave(EventArgs e)
     {
         isHovered = false;
-        Invalidate();
+        InvalidateWithBuffer();
         base.OnMouseLeave(e);
     }
 
+    /// <summary>Handles focus gained event.</summary>
     protected override void OnGotFocus(EventArgs e)
     {
-        Invalidate();
+        InvalidateWithBuffer();
         base.OnGotFocus(e);
     }
 
+    /// <summary>Handles focus lost event.</summary>
     protected override void OnLostFocus(EventArgs e)
     {
-        Invalidate();
+        InvalidateWithBuffer();
         base.OnLostFocus(e);
     }
 
-    // TEMPORARY: Debug positioning with mouse drag
+    /// <summary>Handles mouse down for dragging control.</summary>
     protected override void OnMouseDown(MouseEventArgs e)
     {
         base.OnMouseDown(e);
 
         if (e.Button == MouseButtons.Left)
         {
-            // Always allow focus when clicked
             this.Focus();
 
             if (debugMode)
@@ -190,6 +242,7 @@ public class GlowRectangleControl : Control
         }
     }
 
+    /// <summary>Handles mouse move for smooth dragging.</summary>
     protected override void OnMouseMove(MouseEventArgs e)
     {
         base.OnMouseMove(e);
@@ -199,12 +252,12 @@ public class GlowRectangleControl : Control
             int deltaX = e.X - dragStartPoint.X;
             int deltaY = e.Y - dragStartPoint.Y;
 
+            // Update location - OnLocationChanged will handle invalidation
             this.Location = new Point(originalLocation.X + deltaX, originalLocation.Y + deltaY);
-
-            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Dragging: X={this.Left}, Y={this.Top}");
         }
     }
 
+    /// <summary>Handles mouse up to end dragging.</summary>
     protected override void OnMouseUp(MouseEventArgs e)
     {
         base.OnMouseUp(e);
@@ -215,9 +268,7 @@ public class GlowRectangleControl : Control
             this.Cursor = Cursors.Default;
 
             System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Final Location: X={this.Left}, Y={this.Top}");
-            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
-            Console.WriteLine($"[GlowRectangle] Final Location: X={this.Left}, Y={this.Top}");
-            Console.WriteLine($"[GlowRectangle] Code: glowRectangleControl2.Location = new Point({this.Left}, {this.Top});");
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: glowRectangleControl.Location = new Point({this.Left}, {this.Top});");
         }
         else if (isDragging)
         {
@@ -226,9 +277,9 @@ public class GlowRectangleControl : Control
         }
     }
 
+    /// <summary>Identifies input keys for arrow key handling.</summary>
     protected override bool IsInputKey(Keys keyData)
     {
-        // Tell Windows Forms that this control wants to handle arrow keys
         switch (keyData)
         {
             case Keys.Left:
@@ -244,7 +295,7 @@ public class GlowRectangleControl : Control
         return base.IsInputKey(keyData);
     }
 
-    // TEMPORARY: Debug positioning with keyboard (adjusts background offset)
+    /// <summary>Handles keyboard input for positioning (debug mode).</summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
@@ -273,65 +324,65 @@ public class GlowRectangleControl : Control
                 moved = true;
                 break;
             case Keys.R:
-                System.Diagnostics.Debug.WriteLine("[GlowRectangle] Current Background Offset - use this for fine-tuning");
+                System.Diagnostics.Debug.WriteLine("[GlowRectangle] Current Background Offset");
                 System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
-                Console.WriteLine("[GlowRectangle] Current Background Offset - use this for fine-tuning");
-                Console.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
                 e.Handled = true;
                 return;
         }
 
         if (moved)
         {
-            Invalidate();
+            InvalidateWithBuffer();
             System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
-            Console.WriteLine($"[GlowRectangle] Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
             e.Handled = true;
         }
     }
 
+    /// <summary>Handles keyboard key up events.</summary>
     protected override void OnKeyUp(KeyEventArgs e)
     {
         base.OnKeyUp(e);
 
         if (!debugMode) return;
 
-        // Output final background offset when key is released
-        if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right || 
+        if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right ||
             e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
         {
             System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Final Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
             System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
-            Console.WriteLine($"[GlowRectangle] Final Background Offset: X={backgroundOffset.X}, Y={backgroundOffset.Y}");
-            Console.WriteLine($"[GlowRectangle] Code: backgroundOffset = new Point({backgroundOffset.X}, {backgroundOffset.Y});");
         }
     }
     #endregion
 
     #region Painting
     // ============================================================
-    //  RENDERING LOGIC
+    //  RENDERING LOGIC - OPTIMIZED FOR SMOOTH MOVEMENT
     // ============================================================
 
+    /// <summary>Paints the background with caching for transparency support.</summary>
     protected override void OnPaintBackground(PaintEventArgs pevent)
     {
         if (isCapturingBackground)
         {
-            // Don't try to capture background while already capturing
             base.OnPaintBackground(pevent);
             return;
         }
 
+        // For transparent background, draw the parent's content
         if (Parent != null && BackColor == Color.Transparent)
         {
+            // Only recapture background if cache is invalid (location change, resize, etc.)
             if (!backgroundCacheValid || cachedBackground == null)
             {
                 cachedBackground?.Dispose();
+
+                // Create a bitmap of the entire parent
                 cachedBackground = new Bitmap(Parent.Width, Parent.Height);
 
                 isCapturingBackground = true;
                 try
                 {
+                    // Draw parent to bitmap
                     Parent.DrawToBitmap(cachedBackground, new Rectangle(0, 0, Parent.Width, Parent.Height));
                     backgroundCacheValid = true;
                 }
@@ -341,34 +392,30 @@ public class GlowRectangleControl : Control
                 }
             }
 
-            var graphics = pevent.Graphics;
-            graphics.DrawImage(cachedBackground, 
-                             new Rectangle(0, 0, Width, Height),
-                             new Rectangle(Left + backgroundOffset.X, Top + backgroundOffset.Y, Width, Height), 
-                             GraphicsUnit.Pixel);
+            // Draw the cached background at this control's position
+            if (cachedBackground != null)
+            {
+                pevent.Graphics.DrawImage(cachedBackground,
+                    new Rectangle(0, 0, Width, Height),
+                    new Rectangle(Left + backgroundOffset.X, Top + backgroundOffset.Y, Width, Height),
+                    GraphicsUnit.Pixel);
+            }
         }
         else
         {
+            // Non-transparent background
             base.OnPaintBackground(pevent);
         }
     }
 
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            cachedBackground?.Dispose();
-            cachedBackground = null;
-        }
-        base.Dispose(disposing);
-    }
-
+    /// <summary>Main paint method for rendering the glow effect.</summary>
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
-
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        e.Graphics.Clear(Color.Transparent);  // Clear buffer!
 
+        // Draw glow effect when hovering
         if (isHovered)
         {
             // Outer glow
@@ -386,7 +433,7 @@ public class GlowRectangleControl : Control
         }
         else if (this.Focused && debugMode)
         {
-            // Show a subtle border when focused (but not hovered) in debug mode
+            // Show focus indicator in debug mode
             using (var focusPen = new Pen(Color.FromArgb(128, Color.Yellow), 2))
             {
                 focusPen.DashStyle = DashStyle.Dash;
@@ -394,18 +441,29 @@ public class GlowRectangleControl : Control
             }
         }
 
-        // TEMPORARY: Show positioning help when focused
+        // Show positioning help when focused (debug mode)
         if (debugMode && this.Focused)
         {
             using (var helpBrush = new SolidBrush(Color.FromArgb(200, Color.White)))
             using (var font = new Font("Arial", 8))
             {
-                string help = isDragging 
-                    ? "Dragging Control..." 
-                    : $"Drag: Move Control | Arrows: Adjust Background ({backgroundOffset.X}, {backgroundOffset.Y}) | R: Output";
+                string help = isDragging
+                    ? "Dragging Control..."
+                    : $"Drag: Move | Arrows: Adjust | R: Output";
                 e.Graphics.DrawString(help, font, helpBrush, 5, 5);
             }
         }
+    }
+
+    /// <summary>Cleans up resources.</summary>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            cachedBackground?.Dispose();
+            cachedBackground = null;
+        }
+        base.Dispose(disposing);
     }
     #endregion
 
