@@ -1,10 +1,9 @@
-﻿using Final_Project___Sequence_Game.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Final_Project___Sequence_Game.Classes;
+namespace Final_Project___Sequence_Game.Models;
 
 public class TeamData
 {
