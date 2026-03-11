@@ -28,10 +28,10 @@ public partial class SignIn : Form
         return exists;
     }
     /// <summary>
-    /// Checks if the entered password Matches one in the database.
+    /// Checks if the entered password matches the stored password for the given username.
+    /// Updates the password field's background color to indicate validation status.
     /// </summary>
-    /// <returns>True if the entered password matches the stored 
-    /// password for that account, but returns false if it doesn't match</returns>
+    /// <returns>True if the password matches the stored password for the current username; otherwise, false.</returns>
     public bool CheckPassword()
     {
         if (txtPassword.Text.IsWhiteSpace() || txtUsername.Text.IsWhiteSpace())
@@ -46,11 +46,10 @@ public partial class SignIn : Form
     }
 
     /// <summary>
-    /// Checks if the entered Email matches 
-    /// another Email stored in the database.
+    /// Checks if the entered email matches the email stored for the given username.
+    /// Updates the email field's background color to indicate validation status.
     /// </summary>
-    /// <returns>True if the entered Email matches the stored 
-    /// Email for that account, but returns false if it doesn't match</returns>
+    /// <returns>True if the email matches the stored email for the current username; otherwise, false.</returns>
     public bool CheckEmail()
     {
         if (txtEmail.Text.IsWhiteSpace() || txtUsername.Text.IsWhiteSpace())
@@ -65,6 +64,12 @@ public partial class SignIn : Form
     }
     // ADO helpers removed — EF Core via SequenceGameContext is used instead.
 
+    /// <summary>
+    /// Handles the Sign In button click event.
+    /// Validates all three credential fields and attempts to authenticate the user against the database.
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event arguments.</param>
     private void btnSignIn_Click(object sender, EventArgs e)
     {
         if (txtUsername.Text.IsWhiteSpace() || txtPassword.Text.IsWhiteSpace() || txtEmail.Text.IsWhiteSpace())
@@ -92,6 +97,12 @@ public partial class SignIn : Form
         }
     }
 
+    /// <summary>
+    /// Handles the Create Account button click event.
+    /// Displays the account creation form and hides the current sign-in form.
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event arguments.</param>
     private void btnCreateAccount_Click(object sender, EventArgs e)
     {
         CreateAccount createAccount = new CreateAccount();

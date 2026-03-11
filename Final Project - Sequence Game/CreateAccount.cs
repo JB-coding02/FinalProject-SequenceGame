@@ -3,6 +3,10 @@ using Final_Project___Sequence_Game.Models;
 
 namespace Final_Project___Sequence_Game;
 
+/// <summary>
+/// Represents the form for creating a new player account in the sequence game.
+/// Handles user input validation, database operations, and account creation functionality using Entity Framework Core.
+/// </summary>
 public partial class CreateAccount : Form
 {
     public CreateAccount()
@@ -11,10 +15,11 @@ public partial class CreateAccount : Form
     }
 
     /// <summary>
-    /// Upon Create account button press checks if the entered 
-    /// details are valid and creates a new account in the 
-    /// database if the entered details are unique.
+    /// Handles the Create Account button click event.
+    /// Validates all input fields, checks for duplicate credentials, and creates a new account if validation succeeds.
     /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event arguments.</param>
     private void btnCreateAccount_Click(object sender, EventArgs e)
     {
         if (txtUsername.Text.IsWhiteSpace() || txtPassword.Text.IsWhiteSpace() || txtEmail.Text.IsWhiteSpace())
@@ -51,11 +56,10 @@ public partial class CreateAccount : Form
     }
 
     /// <summary>
-    /// Checks if the entered Username matches 
-    /// another Username stored in the database.
+    /// Checks if the entered username already exists in the database.
+    /// Updates the username field's background color to indicate validation status (red=duplicate, green=available).
     /// </summary>
-    /// <returns>True if the entered Username matches a stored 
-    /// Username for an account, but returns false if it doesn't match</returns>
+    /// <returns>True if the username already exists in the database; otherwise, false.</returns>
     public bool CheckUsername()
     {
         if (txtUsername.Text.IsWhiteSpace())
@@ -73,9 +77,9 @@ public partial class CreateAccount : Form
     }
     /// <summary>
     /// Checks if the entered password matches one in the database.
+    /// Updates the password field's background color to indicate validation status.
     /// </summary>
-    /// <returns>True if the entered password matches a stored 
-    /// password for an account, but returns false if it doesn't match</returns>
+    /// <returns>True if the password already exists in the database; otherwise, false.</returns>
     public bool CheckPassword()
     {
         if (txtPassword.Text.IsWhiteSpace())
@@ -93,11 +97,10 @@ public partial class CreateAccount : Form
     }
 
     /// <summary>
-    /// Checks if the entered Email matches 
-    /// another Email stored in the database.
+    /// Checks if the entered email address already exists in the database.
+    /// Updates the email field's background color to indicate validation status (red=duplicate, green=available).
     /// </summary>
-    /// <returns>True if the entered Email matches a stored 
-    /// Email for an account, but returns false if it doesn't match</returns>
+    /// <returns>True if the email already exists in the database; otherwise, false.</returns>
     public bool CheckEmail()
     {
         if (txtEmail.Text.IsWhiteSpace())
