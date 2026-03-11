@@ -1,7 +1,7 @@
 # Sequence - Basic Description
 
 ## Overview
-Sequence is a board with an accompanying deck of cards made up of 2 standard 52-card decks, the board game has rules for the number of players with 2 players each person gets 7 cards, and from 3-12 players each person gets 6, each player (or team depending on player count) gets uniquely colored "chips" or circular plastic markers, players must only place these on the board and may only place them on the corresponding space of a card they have which after placement they must discard said card from their hand 
+Sequence is a board game played with an accompanying deck of cards made up of two standard 52-card decks. The game has rules for the number of players: with 2 players, each person gets 7 cards, and with 3–12 players, each person gets 6. Each player (or team, depending on player count) gets uniquely colored "chips" or circular plastic markers. Players must place these on the board only on the corresponding space of a card they have in their hand. After placement, they must discard that card from their hand.
 
 ## Components
 - Game board with a 10x10 grid of card faces
