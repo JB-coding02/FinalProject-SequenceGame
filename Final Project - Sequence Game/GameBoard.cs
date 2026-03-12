@@ -1,4 +1,10 @@
 ﻿using System.Drawing.Drawing2D;
+using Final_Project___Sequence_Game.Classes;
+using System.IO;
+using System.Linq;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Final_Project___Sequence_Game;
 
@@ -41,6 +47,72 @@ public partial class GameBoard : Form
     public void SetGlowBox(int x, int y, int width, int height)
     {
         SetGlowBox(new Rectangle(x, y, width, height));
+    }
+
+    // Click handler for hand picture boxes. Replaces the clicked picture with a random
+    // card image from Images/CardsForHand so long as there aren't already two of that
+    // image among the other hand picture boxes.
+    private void picHand_Click(object? sender, EventArgs e)
+    {
+        if (sender is not PictureBox pb)
+            return;
+
+        // Only operate if the picture box currently has an image (per your request)
+        if (pb.Image == null)
+            return;
+
+        var cardFiles = FindCardFiles();
+        if (cardFiles == null || cardFiles.Length == 0)
+            return; // no images available (user asked to ignore missing images for now)
+
+        var rnd = new Random();
+
+        // Helper to get the current tag/name of a picture box image
+        string GetBoxImageKey(PictureBox box)
+        {
+            return box.Tag as string ?? string.Empty;
+        }
+
+        // Get all hand picture boxes
+        PictureBox[] hands = new PictureBox[] { picHand0, picHand1, picHand2, picHand3, picHand4, picHand5, picHand6 };
+
+        // Shuffle candidate files
+        var shuffled = cardFiles.OrderBy(x => rnd.Next()).ToArray();
+
+        foreach (var file in shuffled)
+        {
+            var key = Path.GetFileNameWithoutExtension(file);
+
+            // Count occurrences among other hand boxes (exclude the clicked one)
+            int count = hands.Where(h => h != pb)
+                             .Count(h => string.Equals(GetBoxImageKey(h), key, StringComparison.OrdinalIgnoreCase));
+
+            // Allow up to 1 occurrence already (so max 2 including new), per user's request
+            if (count >= 2)
+                continue; // skip this candidate
+
+            try
+            {
+                // Load image into memory to avoid locking the file
+                byte[] bytes = File.ReadAllBytes(file);
+                using var ms = new MemoryStream(bytes);
+                using var tmp = Image.FromStream(ms);
+                var newImg = new Bitmap(tmp);
+
+                // Dispose existing image to avoid leaks
+                var old = pb.Image;
+                pb.Image = newImg;
+                pb.Tag = key;
+                old?.Dispose();
+
+                break; // applied one image
+            }
+            catch
+            {
+                // Ignore load errors and try next file
+                continue;
+            }
+        }
     }
 
     public string[,] CreateGrid()
@@ -158,5 +230,58 @@ public partial class GameBoard : Form
         {  "FREE", "AD", "KD", "QD", "10D", "9D", "8D", "7D", "6D", "FREE" }
         };
         return cardArray;
+    }
+
+    // Search for card image files in a "CardsForHand" folder located under typical relative paths.
+    private string[] FindCardFiles()
+    {
+        try
+        {
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            var candidates = new List<string>();
+
+            // Try several relative locations up to two parent directories to be resilient in both IDE and published runs
+            var relativePaths = new[]
+            {
+                Path.Combine("Images", "CardsForHand"),
+                Path.Combine("..", "Images", "CardsForHand"),
+                Path.Combine("..", "..", "Images", "CardsForHand"),
+                Path.Combine("..", "..", "..", "Images", "CardsForHand")
+            };
+
+            foreach (var rel in relativePaths)
+            {
+                var full = Path.GetFullPath(Path.Combine(baseDir, rel));
+                if (Directory.Exists(full))
+                {
+                    candidates.Add(full);
+                }
+            }
+
+            // Also check if an Images folder exists next to the executable
+            var alt = Path.Combine(baseDir, "Images", "CardsForHand");
+            if (Directory.Exists(alt) && !candidates.Contains(alt))
+                candidates.Add(alt);
+
+            var exts = new[] { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" };
+            var results = new List<string>();
+            foreach (var dir in candidates)
+            {
+                foreach (var ext in exts)
+                {
+                    try
+                    {
+                        results.AddRange(Directory.GetFiles(dir, ext, SearchOption.TopDirectoryOnly));
+                    }
+                    catch { }
+                }
+            }
+
+            return results.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        }
+        catch
+        {
+            return Array.Empty<string>();
+        }
     }
 }
