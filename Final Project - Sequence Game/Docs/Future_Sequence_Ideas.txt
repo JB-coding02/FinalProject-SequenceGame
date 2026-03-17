@@ -1,0 +1,26 @@
+
+for future: Modular player hand, can be adapted into a game deck.
+_________________________________________________________________________
+
+public partial class GameBoard : Form
+{
+    private PictureBox[] HandPics => new[] { picHand0, picHand1, picHand2, picHand3, picHand4, picHand5, picHand6 };
+
+    private void ClearHand()
+    {
+        foreach (var pb in HandPics)
+        {
+            pb.Image = null;
+            pb.Tag = null;
+        }
+    }
+
+    private void SetHandImages(IReadOnlyList<Image?> images)
+    {
+        var hand = HandPics;
+        for (int i = 0; i < hand.Length; i++)
+        {
+            hand[i].Image = i < images.Count ? images[i] : null;
+        }
+    }
+}

@@ -10,11 +10,9 @@ public partial class SignIn : Form
     }
 
     /// <summary>
-    /// Checks if the entered Username matches 
-    /// another Username stored in the database.
+    /// Check if username exists in the database.
     /// </summary>
-    /// <returns>True if the entered Username matches the stored 
-    /// Username for that account, but returns false if it doesn't match</returns>
+    /// <returns>True if username exists.</returns>
     public bool CheckUsername()
     {
         if (txtUsername.Text.IsWhiteSpace())
@@ -28,10 +26,10 @@ public partial class SignIn : Form
         return exists;
     }
     /// <summary>
-    /// Checks if the entered password matches the stored password for the given username.
-    /// Updates the password field's background color to indicate validation status.
+    /// Checks if the entered password Matches one in the database.
     /// </summary>
-    /// <returns>True if the password matches the stored password for the current username; otherwise, false.</returns>
+    /// <returns>True if the entered password matches the stored 
+    /// password for that account, but returns false if it doesn't match</returns>
     public bool CheckPassword()
     {
         if (txtPassword.Text.IsWhiteSpace() || txtUsername.Text.IsWhiteSpace())
@@ -46,10 +44,11 @@ public partial class SignIn : Form
     }
 
     /// <summary>
-    /// Checks if the entered email matches the email stored for the given username.
-    /// Updates the email field's background color to indicate validation status.
+    /// Checks if the entered Email matches 
+    /// another Email stored in the database.
     /// </summary>
-    /// <returns>True if the email matches the stored email for the current username; otherwise, false.</returns>
+    /// <returns>True if the entered Email matches the stored 
+    /// Email for that account, but returns false if it doesn't match</returns>
     public bool CheckEmail()
     {
         if (txtEmail.Text.IsWhiteSpace() || txtUsername.Text.IsWhiteSpace())
@@ -62,7 +61,7 @@ public partial class SignIn : Form
         txtEmail.BackColor = match ? Color.LightGreen : Color.DarkRed;
         return match;
     }
-    // ADO helpers removed — EF Core via SequenceGameContext is used instead.
+    // ADO helpers removed. EF Core is used.
 
     /// <summary>
     /// Handles the Sign In button click event.
