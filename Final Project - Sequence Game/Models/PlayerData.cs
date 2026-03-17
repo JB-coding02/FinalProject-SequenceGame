@@ -8,7 +8,7 @@ public class PlayerData
 {
     [Required]
     [Key]
-    private int PlayerId
+    public int PlayerId
     {
         get { return PlayerId; }
         set
