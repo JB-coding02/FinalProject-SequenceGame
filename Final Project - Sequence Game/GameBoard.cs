@@ -1,6 +1,4 @@
-﻿using Final_Project___Sequence_Game.Classes;
-
-namespace Final_Project___Sequence_Game;
+﻿namespace Final_Project___Sequence_Game;
 
 /// <summary>
 /// Represents the main game board form where players interact with the sequence game interface.

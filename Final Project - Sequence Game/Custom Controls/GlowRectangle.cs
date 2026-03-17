@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
 namespace Final_Project___Sequence_Game;
@@ -397,7 +397,7 @@ public class GlowRectangleControl : Control
             {
                 pevent.Graphics.DrawImage(cachedBackground,
                     new Rectangle(0, 0, Width, Height),
-                    new Rectangle(Left + backgroundOffset.X, Top + backgroundOffset.Y, Width, Height),
+                    new Rectangle(Left + 11, Top + 45, Width, Height),
                     GraphicsUnit.Pixel);
             }
         }
