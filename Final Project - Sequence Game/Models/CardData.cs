@@ -6,7 +6,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Final_Project___Sequence_Game.Classes;
+namespace Final_Project___Sequence_Game.Models;
 
 public class CardData
 {

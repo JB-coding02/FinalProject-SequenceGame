@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Final_Project___Sequence_Game.Classes;
+namespace Final_Project___Sequence_Game.Models;
 
 /// <summary>
 /// Data structure to hold information about an individual game
