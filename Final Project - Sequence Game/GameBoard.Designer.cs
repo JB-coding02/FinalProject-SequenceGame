@@ -3,14 +3,14 @@
     partial class GameBoard
     {
         /// <summary>
-        /// Required designer variable.
+        /// Designer field.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// Clean up any resources being used.
+        /// Frees resources for other uses
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">if true its found managed resources that are free to be written over.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -60,39 +60,104 @@
             picZoomedInBoard.TabIndex = 2;
             picZoomedInBoard.TabStop = false;
             // 
+            // picHand0
+            // 
+            picHand0.BackColor = Color.Transparent;
+            picHand0.BorderStyle = BorderStyle.FixedSingle;
+            picHand0.Location = new Point(38, 708);
+            picHand0.Name = "picHand0";
+            picHand0.Size = new Size(140, 196);
+            picHand0.SizeMode = PictureBoxSizeMode.StretchImage;
+            picHand0.TabIndex = 10;
+            picHand0.TabStop = false;
+            picHand0.Click += picHand_Click;
+            // 
+            // picHand1
+            // 
+            picHand1.BackColor = Color.Transparent;
+            picHand1.BorderStyle = BorderStyle.FixedSingle;
+            picHand1.Location = new Point(198, 708);
+            picHand1.Name = "picHand1";
+            picHand1.Size = new Size(140, 196);
+            picHand1.SizeMode = PictureBoxSizeMode.StretchImage;
+            picHand1.TabIndex = 11;
+            picHand1.TabStop = false;
+            picHand1.Click += picHand_Click;
+            // 
+            // picHand2
+            // 
+            picHand2.BackColor = Color.Transparent;
+            picHand2.BorderStyle = BorderStyle.FixedSingle;
+            picHand2.Location = new Point(358, 708);
+            picHand2.Name = "picHand2";
+            picHand2.Size = new Size(140, 196);
+            picHand2.SizeMode = PictureBoxSizeMode.StretchImage;
+            picHand2.TabIndex = 12;
+            picHand2.TabStop = false;
+            picHand2.Click += picHand_Click;
+            // 
+            // picHand3
+            // 
+            picHand3.BackColor = Color.Transparent;
+            picHand3.BorderStyle = BorderStyle.FixedSingle;
+            picHand3.Location = new Point(518, 708);
+            picHand3.Name = "picHand3";
+            picHand3.Size = new Size(140, 196);
+            picHand3.SizeMode = PictureBoxSizeMode.StretchImage;
+            picHand3.TabIndex = 13;
+            picHand3.TabStop = false;
+            picHand3.Click += picHand_Click;
+            // 
+            // picHand4
+            // 
+            picHand4.BackColor = Color.Transparent;
+            picHand4.BorderStyle = BorderStyle.FixedSingle;
+            picHand4.Location = new Point(678, 708);
+            picHand4.Name = "picHand4";
+            picHand4.Size = new Size(140, 196);
+            picHand4.SizeMode = PictureBoxSizeMode.StretchImage;
+            picHand4.TabIndex = 14;
+            picHand4.TabStop = false;
+            picHand4.Click += picHand_Click;
+            // 
+            // picHand5
+            // 
+            picHand5.BackColor = Color.Transparent;
+            picHand5.BorderStyle = BorderStyle.FixedSingle;
+            picHand5.Location = new Point(838, 708);
+            picHand5.Name = "picHand5";
+            picHand5.Size = new Size(140, 196);
+            picHand5.SizeMode = PictureBoxSizeMode.StretchImage;
+            picHand5.TabIndex = 15;
+            picHand5.TabStop = false;
+            picHand5.Click += picHand_Click;
+            // 
+            // picHand6
+            // 
+            picHand6.BackColor = Color.Transparent;
+            picHand6.BorderStyle = BorderStyle.FixedSingle;
+            picHand6.Location = new Point(998, 708);
+            picHand6.Name = "picHand6";
+            picHand6.Size = new Size(140, 196);
+            picHand6.SizeMode = PictureBoxSizeMode.StretchImage;
+            picHand6.TabIndex = 16;
+            picHand6.TabStop = false;
+            picHand6.Click += picHand_Click;
+            // 
             // GameBoard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(192, 192, 0);
             ClientSize = new Size(1177, 924);
+            Controls.Add(picHand6);
+            Controls.Add(picHand5);
+            Controls.Add(picHand4);
+            Controls.Add(picHand3);
+            Controls.Add(picHand2);
+            Controls.Add(picHand1);
+            Controls.Add(picHand0);
             Controls.Add(picZoomedInBoard);
-
-            // Hand picture boxes (7), centered horizontally and docked visually above other controls
-            // Card size uses 2.5:3.5 width:height ratio -> height = width * 1.4
-            int handCardWidth = 140;
-            int handCardHeight = (int)(handCardWidth * 1.4); // 196
-            int handSpacing = 20;
-            int totalHandWidth = (7 * handCardWidth) + (6 * handSpacing);
-            int startX = (this.ClientSize.Width - totalHandWidth) / 2;
-            int startY = this.ClientSize.Height - handCardHeight - 20; // 20 px bottom margin
-
-            PictureBox[] handPics = new PictureBox[] { picHand0, picHand1, picHand2, picHand3, picHand4, picHand5, picHand6 };
-            for (int i = 0; i < handPics.Length; i++)
-            {
-                var pb = handPics[i];
-                pb.Location = new Point(startX + i * (handCardWidth + handSpacing), startY);
-                pb.Name = "picHand" + i;
-                pb.Size = new Size(handCardWidth, handCardHeight);
-                pb.SizeMode = PictureBoxSizeMode.StretchImage;
-                pb.TabIndex = 10 + i;
-                pb.TabStop = false;
-                pb.BorderStyle = BorderStyle.FixedSingle;
-                pb.BackColor = Color.Transparent;
-                pb.Click += new EventHandler(picHand_Click);
-                Controls.Add(pb);
-                pb.BringToFront();
-            }
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(2, 2, 2, 2);
             Name = "GameBoard";
@@ -119,5 +184,10 @@
         private PictureBox picHand4;
         private PictureBox picHand5;
         private PictureBox picHand6;
+
     }
+
+	internal class GlowRectangleControl
+	{
+	}
 }

@@ -10,12 +10,10 @@ namespace Final_Project___Sequence_Game;
 
 public partial class GameBoard : Form
 {
-    // State used for mouse hit-testing and custom cursor drawing
+    // true when glow cursor should be shown
     private bool _showGlowingCursor = false;
 
-    // Grouped configuration for the rectangular glow. Update these values
-    // to customize trigger region, draw rectangle, thickness, layers and
-    // base color in one place.
+    // Settings for the glow box (hit area, draw box, look)
     private class GlowConfig
     {
         public Rectangle HitRegion { get; set; } = new Rectangle(29, 92, 86, 67);
@@ -27,14 +25,57 @@ public partial class GameBoard : Form
 
     private GlowConfig _glow = new GlowConfig();
 
+    private readonly PictureBox[] _handPictureBoxes;
+
     public GameBoard(string? PlayerUsername)
     {
         InitializeComponent();
-        // Reduce flicker when custom painting
+        _handPictureBoxes = new[] { picHand0, picHand1, picHand2, picHand3, picHand4, picHand5, picHand6 };
+        // Turn on double buffering to reduce flicker
         this.DoubleBuffered = true;
-        // Attach MouseMove handlers to the form and all child controls so we can
-        // perform hit-testing regardless of which control the mouse is over.
+        // Make sure we get mouse move events from all child controls
         AttachMouseMoveHandlers(this);
+        Resize += (_, _) => LayoutHandPictureBoxes();
+        LayoutHandPictureBoxes();
+    }
+
+    private void LayoutHandPictureBoxes()
+    {
+        const int cardCount = 7;
+        const int bottomMargin = 12;
+        const int sideMargin = 12;
+        const int spacing = 12;
+        const int maxCardWidth = 140;
+
+        var availableWidth = ClientSize.Width - (sideMargin * 2);
+        if (availableWidth <= 0)
+        {
+            return;
+        }
+
+        var cardWidth = Math.Min(maxCardWidth, (availableWidth - (spacing * (cardCount - 1))) / cardCount);
+        if (cardWidth < 1)
+        {
+            cardWidth = 1;
+        }
+
+        var cardHeight = (int)Math.Round(cardWidth * 1.4);
+        var maxHeight = ClientSize.Height - bottomMargin;
+        if (cardHeight > maxHeight)
+        {
+            cardHeight = Math.Max(1, maxHeight);
+            cardWidth = Math.Max(1, (int)Math.Round(cardHeight / 1.4));
+        }
+
+        var totalWidth = (cardWidth * cardCount) + (spacing * (cardCount - 1));
+        var startX = Math.Max(0, (ClientSize.Width - totalWidth) / 2);
+        var y = Math.Max(0, ClientSize.Height - cardHeight - bottomMargin);
+
+        for (var i = 0; i < _handPictureBoxes.Length; i++)
+        {
+            _handPictureBoxes[i].Bounds = new Rectangle(startX + (i * (cardWidth + spacing)), y, cardWidth, cardHeight);
+            _handPictureBoxes[i].Anchor = AnchorStyles.Bottom;
+        }
     }
 
     // Allow other code to change where the glowing box is drawn and its size
@@ -49,15 +90,14 @@ public partial class GameBoard : Form
         SetGlowBox(new Rectangle(x, y, width, height));
     }
 
-    // Click handler for hand picture boxes. Replaces the clicked picture with a random
-    // card image from Images/CardsForHand so long as there aren't already two of that
-    // image among the other hand picture boxes.
+    // When a hand picture is clicked, pick a random card image and show it.
+    // Do not pick an image if two copies already exist in the other hand boxes.
     private void picHand_Click(object? sender, EventArgs e)
     {
         if (sender is not PictureBox pb)
             return;
 
-        // Only operate if the picture box currently has an image (per your request)
+        // Only run if the clicked box has an image
         if (pb.Image == null)
             return;
 
@@ -67,7 +107,7 @@ public partial class GameBoard : Form
 
         var rnd = new Random();
 
-        // Helper to get the current tag/name of a picture box image
+        // Get image key from the Tag
         string GetBoxImageKey(PictureBox box)
         {
             return box.Tag as string ?? string.Empty;
@@ -76,30 +116,30 @@ public partial class GameBoard : Form
         // Get all hand picture boxes
         PictureBox[] hands = new PictureBox[] { picHand0, picHand1, picHand2, picHand3, picHand4, picHand5, picHand6 };
 
-        // Shuffle candidate files
+        // Shuffle files
         var shuffled = cardFiles.OrderBy(x => rnd.Next()).ToArray();
 
         foreach (var file in shuffled)
         {
             var key = Path.GetFileNameWithoutExtension(file);
 
-            // Count occurrences among other hand boxes (exclude the clicked one)
+            // Count occurrences in other hand boxes (exclude clicked)
             int count = hands.Where(h => h != pb)
                              .Count(h => string.Equals(GetBoxImageKey(h), key, StringComparison.OrdinalIgnoreCase));
 
-            // Allow up to 1 occurrence already (so max 2 including new), per user's request
+            // Allow at most 2 total copies. If already 2 or more, skip
             if (count >= 2)
                 continue; // skip this candidate
 
             try
             {
-                // Load image into memory to avoid locking the file
+                // Load image into memory
                 byte[] bytes = File.ReadAllBytes(file);
                 using var ms = new MemoryStream(bytes);
                 using var tmp = Image.FromStream(ms);
                 var newImg = new Bitmap(tmp);
 
-                // Dispose existing image to avoid leaks
+                // Dispose old image
                 var old = pb.Image;
                 pb.Image = newImg;
                 pb.Tag = key;
@@ -139,8 +179,7 @@ public partial class GameBoard : Form
         }
     }
 
-    // Recursively attach MouseMove to all controls so we get MouseMove events
-    // even when the pointer is over child controls.
+    // Attach MouseMove to all child controls so we always get mouse events
     private void AttachMouseMoveHandlers(Control parent)
     {
         parent.MouseMove += OnAnyMouseMove;
@@ -150,10 +189,7 @@ public partial class GameBoard : Form
         }
     }
 
-    // Centralized MouseMove handler which performs hit-testing against
-    // `_hitRegion` (in form client coordinates). If the mouse enters or
-    // leaves the region we flip `_showGlowingCursor` and call Invalidate()
-    // so OnPaint will be called.
+    // Handle mouse moves. Check if pointer is inside the glow area and repaint.
     private void OnAnyMouseMove(object? sender, MouseEventArgs e)
     {
         // Convert coordinates to form client coordinates if the event came
@@ -178,9 +214,7 @@ public partial class GameBoard : Form
         }
     }
 
-    // Override OnPaint so we can draw the custom glowing cursor when
-    // `_showGlowingCursor` is true. We draw several translucent concentric
-    // ellipses to simulate a soft glow and a small white core.
+    // Draw the glow when _showGlowingCursor is true.
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
@@ -191,8 +225,7 @@ public partial class GameBoard : Form
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        // Draw layered rectangle strokes with increasing width and decreasing
-        // alpha to simulate a soft rectangular glow around the configured box.
+        // Draw layered glow rectangles.
         for (int i = 0; i < _glow.Layers; i++)
         {
             int penWidth = _glow.BorderThickness + i * 6;
@@ -207,7 +240,7 @@ public partial class GameBoard : Form
             }
         }
 
-        // Draw a sharp inner border (bright) to define the box edge.
+        // Draw inner border to show the box edge.
         using (var inner = new Pen(Color.FromArgb(220, 255, 255, 255), 2))
         {
             g.DrawRectangle(inner, _glow.Box);

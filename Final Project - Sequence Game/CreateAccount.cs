@@ -11,9 +11,7 @@ public partial class CreateAccount : Form
     }
 
     /// <summary>
-    /// Upon Create account button press checks if the entered 
-    /// details are valid and creates a new account in the 
-    /// database if the entered details are unique.
+    /// When Create Account clicked: check input and add new user if unique.
     /// </summary>
     private void btnCreateAccount_Click(object sender, EventArgs e)
     {
@@ -44,11 +42,9 @@ public partial class CreateAccount : Form
     }
 
     /// <summary>
-    /// Checks if the entered Username matches 
-    /// another Username stored in the database.
+    /// Check if username is already in the database.
     /// </summary>
-    /// <returns>True if the entered Username matches a stored 
-    /// Username for an account, but returns false if it doesn't match</returns>
+    /// <returns>True if username exists.</returns>
     public bool CheckUsername()
     {
         bool exists = false;
@@ -67,10 +63,9 @@ public partial class CreateAccount : Form
         return exists;
     }
     /// <summary>
-    /// Checks if the entered password matches one in the database.
+    /// Check if password text exists in the database.
     /// </summary>
-    /// <returns>True if the entered password matches a stored 
-    /// password for an account, but returns false if it doesn't match</returns>
+    /// <returns>True if password exists.</returns>
     public bool CheckPassword()
     {
         // For account creation this method isn't typically used, but keep
@@ -92,11 +87,9 @@ public partial class CreateAccount : Form
     }
 
     /// <summary>
-    /// Checks if the entered Email matches 
-    /// another Email stored in the database.
+    /// Check if email is already in the database.
     /// </summary>
-    /// <returns>True if the entered Email matches a stored 
-    /// Email for an account, but returns false if it doesn't match</returns>
+    /// <returns>True if email exists.</returns>
     public bool CheckEmail()
     {
         bool exists = false;
@@ -114,6 +107,5 @@ public partial class CreateAccount : Form
         }
         return exists;
     }
-    // Connection string and ADO helpers removed — EF Core is used via
-    // SequenceGameContext and DbConfig.GetConnectionString().
+    // ADO helpers removed. EF Core is used.
 }

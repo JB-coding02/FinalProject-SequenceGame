@@ -10,11 +10,9 @@ public partial class SignIn : Form
     }
 
     /// <summary>
-    /// Checks if the entered Username matches 
-    /// another Username stored in the database.
+    /// Check if username exists in the database.
     /// </summary>
-    /// <returns>True if the entered Username matches the stored 
-    /// Username for that account, but returns false if it doesn't match</returns>
+    /// <returns>True if username exists.</returns>
     public bool CheckUsername()
     {
         bool exists = false;
@@ -27,10 +25,9 @@ public partial class SignIn : Form
         return exists;
     }
     /// <summary>
-    /// Checks if the entered password Matches one in the database.
+    /// Check if the entered password matches the stored one for the user.
     /// </summary>
-    /// <returns>True if the entered password matches the stored 
-    /// password for that account, but returns false if it doesn't match</returns>
+    /// <returns>True if password matches.</returns>
     public bool CheckPassword()
     {
         bool match = false;
@@ -44,11 +41,9 @@ public partial class SignIn : Form
     }
 
     /// <summary>
-    /// Checks if the entered Email matches 
-    /// another Email stored in the database.
+    /// Check if email matches the stored email for the user.
     /// </summary>
-    /// <returns>True if the entered Email matches the stored 
-    /// Email for that account, but returns false if it doesn't match</returns>
+    /// <returns>True if email matches.</returns>
     public bool CheckEmail()
     {
         bool match = false;
@@ -60,7 +55,7 @@ public partial class SignIn : Form
         }
         return match;
     }
-    // ADO helpers removed — EF Core via SequenceGameContext is used instead.
+    // ADO helpers removed. EF Core is used.
 
     private void btnSignIn_Click(object sender, EventArgs e)
     {
