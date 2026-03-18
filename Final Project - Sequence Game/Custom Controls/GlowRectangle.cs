@@ -89,6 +89,50 @@ public class GlowRectangleControl : Control
 
     /// <summary>Debug mode: allows positioning with mouse/keyboard.</summary>
     private bool debugMode = true;
+
+    /// <summary>Background offset - shift the visible background in X and Y.</summary>
+    private Point backgroundOffsetProperty = Point.Empty;
+    [Description("Offset of the background image display (editable in designer).")]
+    [Browsable(true)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+    [DefaultValue(typeof(Point), "10, 45")]
+    public Point BackgroundOffsetProperty
+    {
+        get => backgroundOffsetProperty;
+        set
+        {
+            if (backgroundOffsetProperty != value)
+            {
+                backgroundOffsetProperty = value;
+                backgroundOffset = value;
+                InvalidateWithBuffer();
+            }
+        }
+    }
+
+    /// <summary>Offset scale ratio - multiplier for how offset affects the display.</summary>
+    private float offsetScaleRatio = 1.0f;
+    [Description("Scale ratio for background offset (1.0 = normal, higher = more offset effect).")]
+    [Browsable(true)]
+    [DefaultValue(1.0f)]
+    public float OffsetScaleRatio
+    {
+        get => offsetScaleRatio;
+        set
+        {
+            if (!offsetScaleRatio.Equals(value) && value > 0)
+            {
+                offsetScaleRatio = Math.Max(0.1f, value);
+                InvalidateWithBuffer();
+            }
+        }
+    }
+
+    /// <summary>Drag speed multiplier (1.0 = normal, adjustable with Shift+MouseWheel)</summary>
+    private float dragSpeedMultiplier = 1.0f;
+
+    /// <summary>Offset adjustment speed (1 = normal, adjustable with Shift+PageUp/PageDown)</summary>
+    private float offsetSpeedMultiplier = 1.0f;
     #endregion
 
     #region Internal State
@@ -150,7 +194,11 @@ public class GlowRectangleControl : Control
             previousLocation.Y - padding,
             Width + (padding * 2),
             Height + (padding * 2));
-        Parent.Invalidate(oldRect);  // Clear old trails!
+
+        if (Parent != null)
+        {
+            Parent.Invalidate(oldRect);  // Clear old trails!
+        }
 
         // Invalidate new position
         var newRect = new Rectangle(
@@ -158,7 +206,11 @@ public class GlowRectangleControl : Control
             Location.Y - padding,
             Width + (padding * 2),
             Height + (padding * 2));
-        Parent.Invalidate(newRect);
+
+        if (Parent != null)
+        {
+            Parent.Invalidate(newRect);
+        }
 
         previousLocation = Location;
         base.OnLocationChanged(e);
@@ -249,11 +301,11 @@ public class GlowRectangleControl : Control
 
         if (debugMode && isDragging)
         {
-            int deltaX = e.X - dragStartPoint.X;
-            int deltaY = e.Y - dragStartPoint.Y;
+            float deltaX = (e.X - dragStartPoint.X) * dragSpeedMultiplier;
+            float deltaY = (e.Y - dragStartPoint.Y) * dragSpeedMultiplier;
 
             // Update location - OnLocationChanged will handle invalidation
-            this.Location = new Point(originalLocation.X + deltaX, originalLocation.Y + deltaY);
+            this.Location = new Point((int)Math.Round(originalLocation.X + deltaX), (int)Math.Round(originalLocation.Y + deltaY));
         }
     }
 
@@ -274,6 +326,24 @@ public class GlowRectangleControl : Control
         {
             isDragging = false;
             this.Cursor = Cursors.Default;
+        }
+    }
+
+    /// <summary>Handles mouse wheel for adjusting drag speed when Shift is held.</summary>
+    protected override void OnMouseWheel(MouseEventArgs e)
+    {
+        base.OnMouseWheel(e);
+
+        if (debugMode && ModifierKeys == Keys.Shift)
+        {
+            const float speedDelta = 0.1f;
+            const float minSpeed = 0.1f;
+            const float maxSpeed = 5.0f;
+
+            dragSpeedMultiplier += e.Delta > 0 ? speedDelta : -speedDelta;
+            dragSpeedMultiplier = Math.Max(minSpeed, Math.Min(maxSpeed, dragSpeedMultiplier));
+
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Drag Speed Multiplier: {dragSpeedMultiplier:F2}x");
         }
     }
 
@@ -302,7 +372,24 @@ public class GlowRectangleControl : Control
 
         if (!debugMode) return;
 
-        int step = e.Shift ? 10 : 1;
+        // Handle offset speed adjustment with Shift+PageUp/PageDown
+        if (e.Shift && (e.KeyCode == Keys.PageUp || e.KeyCode == Keys.PageDown))
+        {
+            const float speedDelta = 0.1f;
+            const float minSpeed = 0.1f;
+            const float maxSpeed = 5.0f;
+
+            offsetSpeedMultiplier += e.KeyCode == Keys.PageUp ? speedDelta : -speedDelta;
+            offsetSpeedMultiplier = Math.Max(minSpeed, Math.Min(maxSpeed, offsetSpeedMultiplier));
+
+            System.Diagnostics.Debug.WriteLine($"[GlowRectangle] Offset Speed Multiplier: {offsetSpeedMultiplier:F2}x");
+            e.Handled = true;
+            return;
+        }
+
+        int step = (int)Math.Round(1 * offsetSpeedMultiplier);
+        if (step < 1) step = 1;
+
         bool moved = false;
 
         switch (e.KeyCode)
@@ -364,7 +451,8 @@ public class GlowRectangleControl : Control
     {
         if (isCapturingBackground)
         {
-            base.OnPaintBackground(pevent);
+            // During capture, just use default background to avoid recursion
+            pevent.Graphics.Clear(Color.Transparent);
             return;
         }
 
@@ -376,13 +464,13 @@ public class GlowRectangleControl : Control
             {
                 cachedBackground?.Dispose();
 
-                // Create a bitmap of the entire parent
+                // Create a bitmap of the entire parent to capture all controls
                 cachedBackground = new Bitmap(Parent.Width, Parent.Height);
 
                 isCapturingBackground = true;
                 try
                 {
-                    // Draw parent to bitmap
+                    // Draw parent to bitmap - this captures all controls including the board
                     Parent.DrawToBitmap(cachedBackground, new Rectangle(0, 0, Parent.Width, Parent.Height));
                     backgroundCacheValid = true;
                 }
@@ -392,13 +480,29 @@ public class GlowRectangleControl : Control
                 }
             }
 
-            // Draw the cached background at this control's position
+            // Draw the cached background at this control's position with offset applied
             if (cachedBackground != null)
             {
+                // Calculate source rectangle with offset and scale ratio applied
+                int scaledOffsetX = (int)Math.Round(backgroundOffset.X * offsetScaleRatio);
+                int scaledOffsetY = (int)Math.Round(backgroundOffset.Y * offsetScaleRatio);
+
+                int sourceX = Left + scaledOffsetX;
+                int sourceY = Top + scaledOffsetY;
+
+                // Ensure we don't read outside the bitmap bounds
+                int clampedSourceX = Math.Max(0, Math.Min(sourceX, cachedBackground.Width - Width));
+                int clampedSourceY = Math.Max(0, Math.Min(sourceY, cachedBackground.Height - Height));
+
                 pevent.Graphics.DrawImage(cachedBackground,
                     new Rectangle(0, 0, Width, Height),
-                    new Rectangle(Left + 11, Top + 45, Width, Height),
+                    new Rectangle(clampedSourceX, clampedSourceY, Width, Height),
                     GraphicsUnit.Pixel);
+            }
+            else
+            {
+                // Fallback if cache is null
+                pevent.Graphics.Clear(Color.Transparent);
             }
         }
         else
@@ -411,9 +515,8 @@ public class GlowRectangleControl : Control
     /// <summary>Main paint method for rendering the glow effect.</summary>
     protected override void OnPaint(PaintEventArgs e)
     {
-        base.OnPaint(e);
+        // Don't call base.OnPaint here - we handle our own painting
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-        e.Graphics.Clear(Color.Transparent);  // Clear buffer!
 
         // Draw glow effect when hovering
         if (isHovered)
