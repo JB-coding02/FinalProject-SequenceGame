@@ -8,25 +8,10 @@ public class PlayerData
 {
     [Required]
     [Key]
-    public int PlayerId
-    {
-        get { return PlayerId; }
-        set
-        {
-            PlayerId = value;
-        }
-    }
+    public int PlayerId { get; set; }
 
-    public string Username
-    {
-        get { return Username; }
-        set
-        {
-            Username = value;
-        }
-    }
+    public string Username { get; set; } = string.Empty;
 
-    // Storing raw password is not secure; consider hashing in future.
     public string PasswordHash { get; set; } = string.Empty;
 
     public string PlayerEmail { get; set; } = string.Empty;
