@@ -70,7 +70,6 @@
             picHand0.SizeMode = PictureBoxSizeMode.StretchImage;
             picHand0.TabIndex = 10;
             picHand0.TabStop = false;
-            picHand0.Click += picHand_Click;
             // 
             // picHand1
             // 
@@ -83,7 +82,6 @@
             picHand1.SizeMode = PictureBoxSizeMode.StretchImage;
             picHand1.TabIndex = 11;
             picHand1.TabStop = false;
-            picHand1.Click += picHand_Click;
             // 
             // picHand2
             // 
@@ -96,7 +94,6 @@
             picHand2.SizeMode = PictureBoxSizeMode.StretchImage;
             picHand2.TabIndex = 12;
             picHand2.TabStop = false;
-            picHand2.Click += picHand_Click;
             // 
             // picHand3
             // 
@@ -109,7 +106,6 @@
             picHand3.SizeMode = PictureBoxSizeMode.StretchImage;
             picHand3.TabIndex = 13;
             picHand3.TabStop = false;
-            picHand3.Click += picHand_Click;
             // 
             // picHand4
             // 
@@ -122,7 +118,6 @@
             picHand4.SizeMode = PictureBoxSizeMode.StretchImage;
             picHand4.TabIndex = 14;
             picHand4.TabStop = false;
-            picHand4.Click += picHand_Click;
             // 
             // picHand5
             // 
@@ -135,7 +130,6 @@
             picHand5.SizeMode = PictureBoxSizeMode.StretchImage;
             picHand5.TabIndex = 15;
             picHand5.TabStop = false;
-            picHand5.Click += picHand_Click;
             // 
             // picHand6
             // 
@@ -148,7 +142,6 @@
             picHand6.SizeMode = PictureBoxSizeMode.StretchImage;
             picHand6.TabIndex = 16;
             picHand6.TabStop = false;
-            picHand6.Click += picHand_Click;
             // 
             // glowRectangleControl1
             // 
@@ -191,7 +184,6 @@
 
         #endregion
         private PictureBox picZoomedInBoard;
-        private GlowRectangleControl glowRectangleControl2;
         private PictureBox picHand0;
         private PictureBox picHand1;
         private PictureBox picHand2;

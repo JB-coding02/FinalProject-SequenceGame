@@ -64,6 +64,13 @@ public partial class GameBoard : Form
         AttachMouseMoveHandlers(this);
         this.Load += (_, _) => ScaleAllControls();
         this.Resize += (_, _) => ScaleAllControls();
+
+        // Attach click handlers to hand picture boxes
+        foreach (var hand in _handPictureBoxes)
+        {
+            hand.Click += picHand_Click;
+        }
+
         InitializeGlowEffect();
     }
 
